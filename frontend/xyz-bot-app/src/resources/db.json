@@ -1,0 +1,28 @@
+{
+  "states":
+  {
+    "gameId": "2134b091-b8ee-4113-865d-7f7b004df62c",
+    "gameTick": 55,
+    "map": {
+      "height": 34,
+      "width": 46,
+      "bombPositions": [17, 188, 939, 1217],
+      "obstaclePositions": [17 ,234],
+      "playerInfo":
+      [
+        {
+          "id": "164787f4-6406-4e16-8e7f-0689e3eb8320",
+          "name": "jeppzone",
+          "points": 22,
+          "positions": [150, 232],
+          "stunnedForGameTicks": 0
+        }
+      ],
+      "worldTick": 12
+    },
+    "receivingPlayerId": null,
+    "timeStamp": 1511651978481,
+    "type": "se.cygni.snake.api.event.MapUpdateEvent"
+
+  }
+}
