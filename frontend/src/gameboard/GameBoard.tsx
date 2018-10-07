@@ -1,6 +1,8 @@
 import axios from 'axios';
 import * as React from 'react';
 import IGameState from '../gamestate/gamestate'
+import Blob from './Blob'
+
 export default class GameBoard extends React.Component<{}, {gameState: IGameState}> {
     constructor(props: any) {
         super(props);
@@ -20,7 +22,12 @@ export default class GameBoard extends React.Component<{}, {gameState: IGameStat
 
     public render() {
         return (
-            <div>This is the game board</div>
+            <div>
+                <Blob color={"#2196f3"} rotation={"90deg"}/>
+                <Blob color={"#f44336"} rotation={"0deg"}/>
+                <Blob color={"#ffeb3b"} rotation={"270deg"}/>
+                <Blob color={"#4caf50"} rotation={"180deg"}/>
+            </div>
         )
     }
 }
