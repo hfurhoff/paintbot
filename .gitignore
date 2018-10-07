@@ -36,6 +36,10 @@
 # .idea/*.iml
 # .idea/modules
 
+### VisualStudioCode ###
+.vscode/*
+
+
 # CMake
 cmake-build-*/
 
