@@ -20,7 +20,7 @@ export default class GameBoard extends React.Component<{}, {gameState: IGameStat
 
     public render() {
         return (
-            <div>Tjenare {this.state.gameState.gameId} </div>
+            <div>This is the game board</div>
         )
     }
 }
