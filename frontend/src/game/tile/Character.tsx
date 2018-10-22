@@ -36,7 +36,10 @@ export default class Character extends React.Component<IProps> {
             x: this.props.coordinate.x,
             y: this.props.coordinate.y,
             duration: 0.5,
-            easing: Konva.Easings.EaseInOut
+            easing: Konva.Easings.EaseInOut,
+            onFinish: () => {
+                tween.destroy();
+            }
         });
 
         tween.play();

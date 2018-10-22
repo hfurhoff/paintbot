@@ -40,7 +40,10 @@ export default class ColouredTile extends React.Component<IProps, any> {
             node: this.tile,
             opacity: 1,
             duration: 0.5,
-            easing: Konva.Easings.EaseInOut
+            easing: Konva.Easings.EaseInOut,
+            onFinish: () => {
+                tween.destroy();
+            }
         });
 
         tween.play();
