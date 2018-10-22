@@ -35,18 +35,12 @@ export default class Character extends React.Component<IProps> {
     }
 
     public animate() {
-        const tween = new Konva.Tween({
-            node: this.character,
+        this.character.to({
             x: this.props.coordinate.x,
             y: this.props.coordinate.y,
             duration: 0.5,
             easing: Konva.Easings.EaseInOut,
-            onFinish: () => {
-                tween.destroy();
-            }
         });
-
-        tween.play();
     }
 
     public render() {

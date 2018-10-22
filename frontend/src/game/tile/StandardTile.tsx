@@ -39,17 +39,11 @@ export default class ColouredTile extends React.Component<IProps, any> {
     }
 
     public animate() {
-        const tween = new Konva.Tween({
-            node: this.tile,
+        this.tile.to({
             opacity: 1,
             duration: 0.5,
             easing: Konva.Easings.EaseInOut,
-            onFinish: () => {
-                tween.destroy();
-            }
         });
-
-        tween.play();
     }
 
     public render() {

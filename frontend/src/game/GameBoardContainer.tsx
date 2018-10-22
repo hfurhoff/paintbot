@@ -29,7 +29,9 @@ export default class GameBoardContainer extends React.Component<IProps> {
     }
 
     public componentWillUnmount() {
+        this.stageRef.getStage().destroyChildren();
         this.stageRef.getStage().destroy();
+        this.stageRef.destroyChildren();
         this.stageRef.destroy();
     }
 
