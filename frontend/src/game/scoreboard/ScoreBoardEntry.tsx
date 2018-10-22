@@ -7,6 +7,10 @@ interface IProps {
 }
 export default class ScoreBoardEntry extends React.Component<IProps> {
 
+    public shouldComponentUpdate(nextProps: IProps) {
+        return nextProps.player.points !== this.props.player.points;
+    }
+
     public render() {
         const divStyle = { color: this.props.player.colour };
         return (

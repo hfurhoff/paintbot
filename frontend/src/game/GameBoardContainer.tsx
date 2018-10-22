@@ -1,3 +1,4 @@
+import * as Konva from 'konva';
 import * as React from 'react';
 import { Layer, Stage } from 'react-konva';
 import { IBomb, ICharacter, ICoordinate, ITile} from './game.typings';
@@ -19,6 +20,7 @@ interface IProps {
 export default class GameBoardContainer extends React.Component<IProps> {
     public BOARD_WIDTH: number;
     public BOARD_HEIGHT: number;
+    public stageRef: Konva.Stage
 
     constructor(props: IProps) {
         super(props);
@@ -26,10 +28,27 @@ export default class GameBoardContainer extends React.Component<IProps> {
         this.BOARD_HEIGHT = this.props.height * this.props.tileHeight;
     }
 
+    public componentWillUnmount() {
+        this.stageRef.getStage().destroyChildren();
+        this.stageRef.getStage().destroy();
+        this.stageRef.destroyChildren();
+        this.stageRef.destroy();
+    }
+
     public render() {
         return (
-            <Stage className={'stage'} width={this.BOARD_WIDTH} height={this.BOARD_HEIGHT}>
-                <Layer hitGraphEnabled={false}>
+            <Stage 
+                className={'stage'} 
+                width={this.BOARD_WIDTH} 
+                height={this.BOARD_HEIGHT}
+                listening={false}
+                ref={ (stage: any) => {
+                    if(stage !== null) {
+                        this.stageRef = stage
+                    }
+                } }
+            >
+                <Layer hitGraphEnabled={false} listening={false}>
                     {this.getTileComponents()}
                     {this.getCharacterComponents()}
                     {this.getBombComponents()}

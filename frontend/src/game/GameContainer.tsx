@@ -93,16 +93,6 @@ export default class GameContainer extends React.Component<any, IState> {
         
     }
 
-   /* private addEmptyTiles(width: number, height: number) {
-        for(let i = 0; i < width; i++) {
-            for(let j = 0; j < height; j++) {
-                const c = { x: i, y: j } as ICoordinate;
-                const tile = { coordinate: c, type: TileType.EMPTY, colour: EMPTY_TILE_COLOUR } as ITile;
-                this.tiles.set(JSON.stringify(c), tile);
-            } 
-        }
-    } */
-
     private addColouredTilesForPlayers(characterInfos: ICharacterInfo []) {
         characterInfos.forEach(c => { 
             this.addColouredTilesForPlayer(c.colouredPositions, c.id);

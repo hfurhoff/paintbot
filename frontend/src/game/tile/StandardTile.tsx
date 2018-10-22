@@ -25,21 +25,25 @@ export default class ColouredTile extends React.Component<IProps, any> {
 
     public componentDidMount() {
         this.animate();
+        this.tile.cache();
+        this.tile.transformsEnabled('position');
+    }
+
+    public componentWillUnmount() {
+        this.tile.destroy();
     }
 
     public componentDidUpdate() {
         this.animate();
+        this.tile.cache();
     }
 
     public animate() {
-        const tween = new Konva.Tween({
-            node: this.tile,
+        this.tile.to({
             opacity: 1,
             duration: 0.5,
-            easing: Konva.Easings.EaseInOut
+            easing: Konva.Easings.EaseInOut,
         });
-
-        tween.play();
     }
 
     public render() {
@@ -53,6 +57,8 @@ export default class ColouredTile extends React.Component<IProps, any> {
                 height={this.props.width}
                 cornerRadius = {5}
                 stroke={'black'}
+                perfectDrawEnabled={false}
+                listening={false}
                 ref={ (node: Konva.Rect) => { 
                     if(node !== null) {
                         this.tile = node;
