@@ -26,7 +26,6 @@ export default class ColouredTile extends React.Component<IProps, any> {
     public componentDidMount() {
         this.animate();
         this.tile.cache();
-        this.tile.transformsEnabled('opacity');
         this.tile.transformsEnabled('position');
     }
 
