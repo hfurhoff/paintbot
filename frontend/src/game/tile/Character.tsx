@@ -17,8 +17,13 @@ export default class Character extends React.Component<IProps> {
 
     public character: Konva.Group;
 
+    public componentDidMount() {
+        this.character.transformsEnabled('position');
+    }
+
     public componentDidUpdate() {
         this.animate();
+        this.character.cache();
     }
 
     public shouldComponentUpdate(nextProps: IProps) {
@@ -39,14 +44,20 @@ export default class Character extends React.Component<IProps> {
 
     public render() {
         return (
-            <Group x={this.props.previousCoordinate.x} y={this.props.previousCoordinate.y} width={this.props.width} height={this.props.height}
+            <Group 
+                x={this.props.previousCoordinate.x} 
+                y={this.props.previousCoordinate.y} 
+                width={this.props.width} 
+                height={this.props.height}
+                listening={false}
                 ref={ (node: Konva.Group) => { 
                     if(node !== null) {
                         this.character = node;
                 }  } }
             >
-                <Circle offsetX={-this.props.width/2} offsetY={-this.props.height/2} radius={this.props.width/2} fill={this.props.colour} stroke={'#001638'}/>
-                <Circle offsetX={-this.props.width/2} offsetY={-this.props.height/2} radius={this.props.width/4} fill={this.props.colour} stroke={'#001638'}/>
+                <Circle perfectDrawEnabled={false} offsetX={-this.props.width/2} offsetY={-this.props.height/2} radius={this.props.width/2} fill={this.props.colour} stroke={'#001638'}/>
+                <Circle perfectDrawEnabled={false} offsetX={-this.props.width/2} offsetY={-this.props.height/2} radius={this.props.width/4} fill={this.props.colour} stroke={'#001638'}/>
+                <Circle perfectDrawEnabled={false} offsetX={-this.props.width/2} offsetY={-this.props.height/2} radius={this.props.width/16} fill={'#001638'} stroke={'#001638'}/>
             </Group>
         );
     }

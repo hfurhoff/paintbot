@@ -33,6 +33,8 @@ export default class Bomb extends React.Component<IProps> {
                 y={this.props.bomb.coordinate.y}
                 width={this.props.width}
                 height={this.props.width}
+                perfectDrawEnabled={false}
+                listening={false}
             />
         );
     }
