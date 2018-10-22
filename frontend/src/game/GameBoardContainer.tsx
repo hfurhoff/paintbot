@@ -39,13 +39,14 @@ export default class GameBoardContainer extends React.Component<IProps> {
                 className={'stage'} 
                 width={this.BOARD_WIDTH} 
                 height={this.BOARD_HEIGHT}
+                listening={false}
                 ref={ (stage: any) => {
                     if(stage !== null) {
                         this.stageRef = stage
                     }
                 } }
             >
-                <Layer hitGraphEnabled={false}>
+                <Layer hitGraphEnabled={false} listening={false}>
                     {this.getTileComponents()}
                     {this.getCharacterComponents()}
                     {this.getBombComponents()}
