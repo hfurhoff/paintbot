@@ -21,6 +21,10 @@ export default class Character extends React.Component<IProps> {
         this.character.transformsEnabled('position');
     }
 
+    public componentWillUnmount() {
+        this.character.destroy();
+    }
+
     public componentDidUpdate() {
         this.animate();
         this.character.cache();
