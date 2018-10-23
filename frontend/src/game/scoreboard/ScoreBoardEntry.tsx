@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { StandardColors } from '../../common/Constants';
 import { Row } from '../../common/Row';
 import { Spacing } from '../../common/Spacing';
 import { TextLabel } from '../../common/TextLabel';
@@ -35,7 +36,7 @@ export default class ScoreBoardEntry extends React.Component<Props> {
             justifyContent={'space-between'}
             style={{
               display: 'flex',
-              backgroundColor: '#000',
+              backgroundColor: StandardColors.Black,
               borderRadius: '5px',
             }}
           >
