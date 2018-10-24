@@ -1,27 +1,27 @@
 import * as React from 'react';
 import { StandardColors, TileColors } from '../common/Constants';
-import GameBoardContainer from './GameBoardContainer';
+import GameBoardContainer from './gameboard/GameBoardContainer';
 import ScoreBoardContainer from './scoreboard/ScoreBoardContainer';
 import {
-  Bomb,
   Character,
   CharacterInfo,
   Coordinate,
   EventType,
   GameMap,
   GameState,
+  PowerUp,
   Tile,
   TileType,
 } from './type';
 
-interface Props { }
+interface Props {}
 
 interface State {
   tiles: Map<string, Tile>;
   currentCharacters: Character[];
   previousCharacters: Character[];
-  bombs: Bomb[];
-  worldTick: number
+  bombs: PowerUp[];
+  worldTick: number;
 }
 
 const colours = ['#4286f4', '#d3422c', '#88d852', '#f0fc0c', '#c774f2'];
@@ -61,7 +61,10 @@ export default class GameContainer extends React.Component<Props, State> {
       <div>
         <h1>XYZ-BOT</h1>
         <div className="container">
-          <ScoreBoardContainer players={this.state.currentCharacters} worldTick={this.state.worldTick} />
+          <ScoreBoardContainer
+            players={this.state.currentCharacters}
+            worldTick={this.state.worldTick}
+          />
           <GameBoardContainer
             tiles={this.state.tiles}
             characters={this.state.currentCharacters}
@@ -107,7 +110,7 @@ export default class GameContainer extends React.Component<Props, State> {
         currentCharacters: this.createCharacters(this.map.characterInfos),
         previousCharacters: previousState.currentCharacters,
         bombs: this.createBombs(this.map.bombPositions),
-        worldTick: this.map.worldTick
+        worldTick: this.map.worldTick,
       };
     });
   }
@@ -147,10 +150,10 @@ export default class GameContainer extends React.Component<Props, State> {
     });
   }
 
-  private createBombs(bombPositions: number[]): Bomb[] {
-    const bombs: Bomb[] = [];
+  private createBombs(bombPositions: number[]): PowerUp[] {
+    const bombs: PowerUp[] = [];
     bombPositions.forEach(bombPosition => {
-      const bomb = {} as Bomb;
+      const bomb = {} as PowerUp;
       bomb.coordinate = this.getCoordinateFromMapPosition(bombPosition);
       bomb.image = '/images/bomb.png';
       bombs.push(bomb);
