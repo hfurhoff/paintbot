@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { StandardColors, TileColors } from '../common/Constants';
-import { Header } from '../common/Header';
 import Config from '../Config';
 import GameBoardContainer from './gameboard/GameBoardContainer';
 import ScoreBoardContainer from './scoreboard/ScoreBoardContainer';
+import Timer from './timer/Timer';
 import {
   Character,
   CharacterInfo,
@@ -36,9 +36,27 @@ const Container = styled.div`
   margin: auto;
 `;
 
+const HeaderContainer = styled.div`
+  position: relative;
+  display: flex;
+  padding: 10px;
+  font-size: 40px;
+  justify-content: center;
+  flex-direction: row;
+`;
+
+const GameNameContainer = styled.div`
+  position: absolute;
+  left: 0;
+`;
+
+const TimerContainer = styled.div`
+  display: flex;
+`;
+
 export default class GameContainer extends React.Component<Props, State> {
   private map: GameMap;
-
+  private timer: Timer;
   private readonly tiles: Map<string, Tile>;
   private readonly ws: WebSocket;
 
@@ -66,7 +84,19 @@ export default class GameContainer extends React.Component<Props, State> {
   public render() {
     return this.state && this.state.tiles ? (
       <div>
-        <Header label={'XYZ-BOT'} />
+        <HeaderContainer>
+          <GameNameContainer>XYZ-Bot</GameNameContainer>
+          <TimerContainer>
+            <Timer
+              startTimeInMinutes={Config.TimerMinutes}
+              ref={x => {
+                if (x !== null) {
+                  this.timer = x;
+                }
+              }}
+            />
+          </TimerContainer>
+        </HeaderContainer>
         <Container>
           {this.tryRenderScoreBoard()}
           {this.tryRenderGameBoard()}
@@ -76,6 +106,7 @@ export default class GameContainer extends React.Component<Props, State> {
   }
 
   public componentDidMount() {
+    this.timer.start();
     this.ws.onmessage = (evt: MessageEvent) => this.onUpdateFromServer(evt);
   }
 
@@ -140,6 +171,7 @@ export default class GameContainer extends React.Component<Props, State> {
   }
 
   private endGame() {
+    this.timer.stop();
     this.ws.close();
   }
 
