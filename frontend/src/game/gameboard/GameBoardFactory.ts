@@ -3,6 +3,7 @@ import {
   Character,
   CharacterInfo,
   Coordinate,
+  Game,
   GameMap,
   PowerUp,
   Tile,
@@ -12,26 +13,37 @@ import {
 const colours = ['#4286f4', '#d3422c', '#88d852', '#f0fc0c', '#c774f2'];
 
 export default class GameBoardFactory {
-  private gameMap: GameMap;
-  private currentCharacters: Character[];
+  private gameMap: GameMap = {} as GameMap;
+  private currentTiles: Map<string, Tile> = new Map<string, Tile>();
+  private currentCharacters: Character[] = [];
+  private previousCharacters: Character[] = [];
 
-  public updateGameMap(
-    newGameMap: GameMap,
-    currentCharacters: Character[],
-  ): void {
-    this.gameMap = newGameMap;
-    this.currentCharacters = currentCharacters;
+  public getGameBoard(gameMap: GameMap): Game {
+    this.gameMap = gameMap;
+
+    const game = {
+      tiles: this.createTiles(),
+      currentCharacters: this.createCharacters(),
+      previousCharacters: this.getPreviousCharacters(),
+      bombs: this.createPowerUps(),
+      worldTick: this.getWorldTick(),
+      width: this.getWidth(),
+      height: this.getHeight(),
+    };
+
+    return game;
   }
 
-  public createTiles(currentTiles: Map<string, Tile>) {
-    const newTiles = currentTiles;
+  private createTiles() {
+    const newTiles = this.currentTiles;
     this.addObstacleTiles(this.gameMap.obstaclePositions, newTiles);
     this.addColouredTilesForPlayers(this.gameMap.characterInfos, newTiles);
 
     return newTiles;
   }
 
-  public createCharacters(): Character[] {
+  private createCharacters(): Character[] {
+    this.previousCharacters = this.currentCharacters;
     const characters: Character[] = [];
     this.gameMap.characterInfos.forEach((characterInfo, index) => {
       const character = {
@@ -43,10 +55,11 @@ export default class GameBoardFactory {
       };
       characters.push(character);
     });
+    this.currentCharacters = characters;
     return characters;
   }
 
-  public createPowerUps() {
+  private createPowerUps() {
     const bombs: PowerUp[] = [];
     this.gameMap.bombPositions.forEach(bombPosition => {
       const bomb = {} as PowerUp;
@@ -57,15 +70,19 @@ export default class GameBoardFactory {
     return bombs;
   }
 
-  public getWidth() {
+  private getPreviousCharacters() {
+    return this.previousCharacters;
+  }
+
+  private getWidth() {
     return this.gameMap ? this.gameMap.width : 0;
   }
 
-  public getHeight() {
+  private getHeight() {
     return this.gameMap ? this.gameMap.height : 0;
   }
 
-  public getWorldTick() {
+  private getWorldTick() {
     return this.gameMap ? this.gameMap.worldTick : 0;
   }
 
