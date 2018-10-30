@@ -28,8 +28,8 @@ public class Map {
             @JsonProperty("bombPositions") int[] bombPositions,
             @JsonProperty("obstaclePositions") int[] obstaclePositions,
             @JsonProperty("colissionInfos") ColissionInfo[] colissionInfos,
-            BombingInfo[] bombingInfos)
-    {
+            @JsonProperty("bombingInfos") BombingInfo[] bombingInfos
+    ) {
         this.width = width;
         this.height = height;
         this.worldTick = worldTick;
