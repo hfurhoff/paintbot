@@ -2,7 +2,9 @@ package se.cygni.snake.apiconversion;
 
 import se.cygni.game.WorldState;
 import se.cygni.game.worldobject.CharacterImpl;
+import se.cygni.snake.api.model.BombingInfo;
 import se.cygni.snake.api.model.CharacterInfo;
+import se.cygni.snake.api.model.ColissionInfo;
 import se.cygni.snake.api.model.Map;
 import se.cygni.snake.player.IPlayer;
 
@@ -18,6 +20,14 @@ public class WorldStateConverter {
         CharacterInfo[] characterInfos = getCharacterInfos(ws, players);
         int[] foods = ws.listBombPositions();
         int[] obstacles = ws.listObstaclePositions();
+        ColissionInfo[] colissionInfos = ws.getCollisions().entrySet().stream()
+                .map(e -> new ColissionInfo(e.getKey(), e.getValue().toArray(String[]::new)))
+                .toArray(ColissionInfo[]::new);
+
+        BombingInfo[] bombingInfos = ws.getBombings().entrySet().stream()
+                .map(e -> new BombingInfo(e.getKey(), e.getValue().toArray(String[]::new)))
+                .toArray(BombingInfo[]::new);
+
 
         return new Map(
                 width,
@@ -25,7 +35,9 @@ public class WorldStateConverter {
                 worldTick,
                 characterInfos,
                 foods,
-                obstacles);
+                obstacles,
+                colissionInfos,
+                bombingInfos);
     }
 
     private static CharacterInfo[] getCharacterInfos(WorldState ws, Set<IPlayer> players) {

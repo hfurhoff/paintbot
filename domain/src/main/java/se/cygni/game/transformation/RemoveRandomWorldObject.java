@@ -28,7 +28,8 @@ public class RemoveRandomWorldObject<T extends WorldObject> implements WorldTran
         int randomPosition = positionsWithContentOfType[random.nextInt(positionsWithContentOfType.length)];
 
         Tile[] tiles = currentWorld.getTiles();
-        tiles[randomPosition] = new Tile(new Empty());
+        Tile currentTile = tiles[randomPosition];
+        tiles[randomPosition] = new Tile(new Empty(), currentTile.getOwnerID());
 
         return new WorldState(currentWorld.getWidth(), currentWorld.getHeight(), tiles);
     }

@@ -16,6 +16,9 @@ public class Map {
     // List of position containing Obstacle
     final int[] obstaclePositions;
 
+    final ColissionInfo[] colissionInfos;
+    final BombingInfo[] bombingInfos;
+
     @JsonCreator
     public Map(
             @JsonProperty("width") int width,
@@ -23,8 +26,9 @@ public class Map {
             @JsonProperty("worldTick") long worldTick,
             @JsonProperty("characterInfos") CharacterInfo[] characterInfos,
             @JsonProperty("bombPositions") int[] bombPositions,
-            @JsonProperty("obstaclePositions") int[] obstaclePositions
-    )
+            @JsonProperty("obstaclePositions") int[] obstaclePositions,
+            @JsonProperty("colissionInfos") ColissionInfo[] colissionInfos,
+            BombingInfo[] bombingInfos)
     {
         this.width = width;
         this.height = height;
@@ -32,6 +36,8 @@ public class Map {
         this.characterInfos = characterInfos;
         this.bombPositions = bombPositions;
         this.obstaclePositions = obstaclePositions;
+        this.colissionInfos = colissionInfos;
+        this.bombingInfos = bombingInfos;
     }
 
     public int getWidth() {
@@ -56,5 +62,13 @@ public class Map {
 
     public int[] getObstaclePositions() {
         return obstaclePositions;
+    }
+
+    public ColissionInfo[] getColissionInfos() {
+        return colissionInfos;
+    }
+
+    public BombingInfo[] getBombingInfos() {
+        return bombingInfos;
     }
 }

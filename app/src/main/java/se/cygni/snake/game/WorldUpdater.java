@@ -10,14 +10,12 @@ import se.cygni.game.WorldState;
 import se.cygni.game.enums.Action;
 import se.cygni.game.exception.OutOfBoundsException;
 import se.cygni.game.exception.TransformationException;
-import se.cygni.game.transformation.PerformCharacterAction;
+import se.cygni.game.random.XORShiftRandom;
+import se.cygni.game.worldobject.*;
 import se.cygni.game.worldobject.Character;
-import se.cygni.game.worldobject.CharacterImpl;
-import se.cygni.game.worldobject.Empty;
 import se.cygni.snake.api.event.CharacterStunnedEvent;
 import se.cygni.snake.api.model.StunReason;
 import se.cygni.snake.apiconversion.GameMessageConverter;
-import se.cygni.snake.client.MapUtil;
 import se.cygni.snake.event.InternalGameEvent;
 import se.cygni.snake.player.IPlayer;
 
@@ -25,13 +23,12 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 public class WorldUpdater {
 
     private static final Logger log = LoggerFactory.getLogger(WorldUpdater.class);
-
+    private XORShiftRandom random = new XORShiftRandom();
     private final GameFeatures gameFeatures;
     private final PlayerManager playerManager;
     private final String gameId;
@@ -55,8 +52,6 @@ public class WorldUpdater {
 
         WorldState nextWorld = new WorldState(ws);
 
-        Map<Integer, List<String>> playersPositions = new HashMap<>();
-
         Map<String, Integer> originalPositions = actions.entrySet().stream().collect(
                 Collectors.toMap(
                         Map.Entry::getKey,
@@ -69,15 +64,24 @@ public class WorldUpdater {
                 .map(e -> getNextPosition(e, ws))
                 .collect(Collectors.groupingBy(Pair::getKey, Collectors.mapping(Pair::getValue, Collectors.toList()))));
 
+        var stunnedPlayers = new LinkedList<String>();
 
+        // Move all colliding player to original position
         while(updatedPositions.entrySet().stream().anyMatch(e -> e.getValue().size() > 1)){
             var collidingEntries = updatedPositions.entrySet()
                     .stream()
                     .filter(e -> e.getValue().size() > 1)
                     .collect(toList());
             for (var entry : collidingEntries) {
-                List<String> colliders = updatedPositions.get(entry.getKey());
+                Map<Integer, List<String>> collisions = nextWorld.getCollisions();
+                int position = entry.getKey();
+                List<String> collisionsToReport = collisions.getOrDefault(position, new LinkedList<>());
+                var colliders = updatedPositions.get(position);
+                collisionsToReport.addAll(colliders);
+                collisions.put(position, collisionsToReport);
+
                 for(var player : entry.getValue()) {
+                    stunnedPlayers.add(player);
                     Integer originalPosition = originalPositions.get(player);
                     List<String> playersAtPos = updatedPositions.getOrDefault(originalPosition, new LinkedList<>());
                     playersAtPos.add(player);
@@ -87,17 +91,47 @@ public class WorldUpdater {
             }
         }
 
-
+        // Set colliding players to stunned
+        stunnedPlayers.forEach(p -> nextWorld.getCharacterById(p).setIsStunnedForTicks(gameFeatures.getNoOfTicksStunned()));
 
         for(var e : updatedPositions.entrySet()) {
             for(var p : e.getValue()) {
-                updateCharacterState(nextWorld.getTiles(), e.getKey(), ws.getCharacterById(p), false);
+                int targetPosition = e.getKey();
+                var hasPickedUpBomb = ws.getTile(targetPosition).getContent() instanceof Bomb;
+                updateCharacterState(nextWorld.getTiles(), targetPosition, nextWorld.getCharacterById(p), hasPickedUpBomb);
             }
         }
 
+        Map<Integer, List<String>> positionsBombed = new HashMap<>();
+        actions.entrySet().stream()
+                .filter(e -> e.getValue().equals(Action.EXPLODE) && ws.getCharacterById(e.getKey()).isCarryingBomb())
+                .forEach(e -> {
+                    String playerId = e.getKey();
+                    var player = nextWorld.getCharacterById(playerId);
+                    player.setCarryingBomb(false);
+                    int position = player.getPosition();
+                    Arrays.stream(nextWorld.listAdjacentTiles(position))
+                            .forEach(adjacentPosition -> {
+                                List<String> playersBombingPosition = positionsBombed.getOrDefault(adjacentPosition, new LinkedList<>());
+                                playersBombingPosition.add(playerId);
+                                positionsBombed.put(adjacentPosition, playersBombingPosition);
+                            });
+                });
 
-        // TODO Handle stuns
-        // TODO Handle explosions
+        nextWorld.setBombings(positionsBombed);
+
+        positionsBombed.forEach((position, players) -> {
+            WorldObject content = nextWorld.getTile(position).getContent();
+            Tile[] tiles = nextWorld.getTiles();
+            if (content instanceof Empty) {
+                // Randomly select one player to successfully bomb
+                String playerId = players.get(random.nextInt(players.size()));
+                tiles[position] = new Tile(new Empty(), playerId);
+            } else if (content instanceof Character) {
+                nextWorld.getCharacterAtPosition(position).setIsStunnedForTicks(gameFeatures.getNoOfTicksStunned());
+            }
+
+        });
 
         return nextWorld;
 
@@ -109,6 +143,7 @@ public class WorldUpdater {
         tiles[character.getPosition()] = new Tile(new Empty(), currentTile.getOwnerID());
         tiles[targetPosition] = new Tile(character, character.getPlayerId());
         character.setPosition(targetPosition);
+        character.setCarryingBomb(hasPickedUpBomb);
     }
 
     private Pair<Integer, String> getNextPosition(Map.Entry<String, Action> updateEntry, WorldState ws) {

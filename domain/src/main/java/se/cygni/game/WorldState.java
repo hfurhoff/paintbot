@@ -5,10 +5,11 @@ import se.cygni.game.enums.Action;
 import se.cygni.game.exception.OutOfBoundsException;
 import se.cygni.game.worldobject.*;
 import se.cygni.game.worldobject.Character;
-import se.cygni.game.worldobject.CharacterImpl;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -17,6 +18,8 @@ public class WorldState {
 
     private final int width, height;
     private final Tile[] tiles;
+    private Map<Integer, List<String>> collisions = new HashMap<>();
+    private Map<Integer, List<String>> bombings = new HashMap<>();
 
     public WorldState(int width, int height) {
         this.width = width;
@@ -257,5 +260,21 @@ public class WorldState {
                 }
         );
         return tiles;
+    }
+
+    public Map<Integer, List<String>> getBombings() {
+        return bombings;
+    }
+
+    public void setBombings(Map<Integer, List<String>> bombings) {
+        this.bombings = bombings;
+    }
+
+    public Map<Integer, List<String>> getCollisions() {
+        return collisions;
+    }
+
+    public void setCollisions(Map<Integer, List<String>> collisions) {
+        this.collisions = collisions;
     }
 }

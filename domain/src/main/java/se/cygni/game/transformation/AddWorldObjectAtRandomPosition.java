@@ -4,6 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import se.cygni.game.Tile;
 import se.cygni.game.WorldState;
 import se.cygni.game.random.XORShiftRandom;
+import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Character;
 import se.cygni.game.worldobject.WorldObject;
 
@@ -37,12 +38,17 @@ public class AddWorldObjectAtRandomPosition implements WorldTransformation {
         int randomPosition = validPositions[random.nextInt(validPositions.length)];
 
         Tile[] tiles = currentWorld.getTiles();
-        tiles[randomPosition] = new Tile(worldObject);
+        Tile currentTile = tiles[randomPosition];
+        Tile newTile = new Tile(worldObject);
 
         if (worldObject instanceof Character) {
             Character character = (Character)worldObject;
             character.setPosition(randomPosition);
+        } else if (worldObject instanceof Bomb) {
+            newTile = new Tile(worldObject, currentTile.getOwnerID());
         }
+
+        tiles[randomPosition] = newTile;
 
         return new WorldState(currentWorld.getWidth(), currentWorld.getHeight(), tiles);
     }
