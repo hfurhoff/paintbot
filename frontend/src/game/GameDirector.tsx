@@ -68,12 +68,19 @@ export default class GameDirector extends React.Component<Props, State> {
     this.endGame();
   }
 
+  public pauseGame() {
+    clearInterval(this.updateInterval);
+  }
+
+  public restartGame() {
+    this.currentEventIndex = 0;
+  }
+
   private onUpdateFromServer(evt: MessageEvent) {
     this.events.push(JSON.parse(evt.data));
   }
 
   private gameSpeedChange = (changeSpeedTo: number) => {
-    clearInterval(this.updateInterval);
     this.updateGameSpeedInterval(changeSpeedTo);
   };
 
@@ -92,9 +99,9 @@ export default class GameDirector extends React.Component<Props, State> {
       } else if (data.type === EventType.GAME_UPDATE_EVENT) {
         this.setState({ gameState: data as GameState });
       }
-
-      this.currentEventIndex++;
     }
+
+    this.currentEventIndex++;
   }
 
   private endGame() {
