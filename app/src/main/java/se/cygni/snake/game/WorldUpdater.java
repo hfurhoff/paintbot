@@ -11,15 +11,22 @@ import se.cygni.game.enums.Action;
 import se.cygni.game.exception.OutOfBoundsException;
 import se.cygni.game.exception.TransformationException;
 import se.cygni.game.random.XORShiftRandom;
-import se.cygni.game.worldobject.*;
+import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Character;
+import se.cygni.game.worldobject.CharacterImpl;
+import se.cygni.game.worldobject.Empty;
+import se.cygni.game.worldobject.WorldObject;
 import se.cygni.snake.api.event.CharacterStunnedEvent;
 import se.cygni.snake.api.model.StunReason;
 import se.cygni.snake.apiconversion.GameMessageConverter;
 import se.cygni.snake.event.InternalGameEvent;
 import se.cygni.snake.player.IPlayer;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -94,11 +101,13 @@ public class WorldUpdater {
         // Set colliding players to stunned
         stunnedPlayers.forEach(p -> nextWorld.getCharacterById(p).setIsStunnedForTicks(gameFeatures.getNoOfTicksStunned()));
 
+        Tile[] tiles = nextWorld.getTiles();
+
         for(var e : updatedPositions.entrySet()) {
             for(var p : e.getValue()) {
                 int targetPosition = e.getKey();
                 var hasPickedUpBomb = ws.getTile(targetPosition).getContent() instanceof Bomb;
-                updateCharacterState(nextWorld.getTiles(), targetPosition, nextWorld.getCharacterById(p), hasPickedUpBomb);
+                updateCharacterState(tiles, targetPosition, nextWorld.getCharacterById(p), hasPickedUpBomb);
             }
         }
 
@@ -122,7 +131,6 @@ public class WorldUpdater {
 
         positionsBombed.forEach((position, players) -> {
             WorldObject content = nextWorld.getTile(position).getContent();
-            Tile[] tiles = nextWorld.getTiles();
             if (content instanceof Empty) {
                 // Randomly select one player to successfully bomb
                 String playerId = players.get(random.nextInt(players.size()));
@@ -133,7 +141,8 @@ public class WorldUpdater {
 
         });
 
-        return nextWorld;
+
+        return new WorldState(ws.getWidth(), ws.getHeight(), tiles, nextWorld.getCollisions(), nextWorld.getBombings());
 
     }
 

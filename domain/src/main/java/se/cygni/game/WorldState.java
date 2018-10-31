@@ -3,8 +3,12 @@ package se.cygni.game;
 import org.apache.commons.lang3.ArrayUtils;
 import se.cygni.game.enums.Action;
 import se.cygni.game.exception.OutOfBoundsException;
-import se.cygni.game.worldobject.*;
+import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Character;
+import se.cygni.game.worldobject.CharacterImpl;
+import se.cygni.game.worldobject.Empty;
+import se.cygni.game.worldobject.Obstacle;
+import se.cygni.game.worldobject.WorldObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,6 +42,16 @@ public class WorldState {
         this.height = worldState.getHeight();
         this.tiles = worldState.getTiles();
     }
+
+
+    public WorldState(int width, int height, Tile[] tiles, Map<Integer, List<String>> collisions, Map<Integer, List<String>> bombings) {
+        this.width = width;
+        this.height = height;
+        this.tiles = ArrayUtils.clone(tiles);
+        this.collisions = collisions;
+        this.bombings = bombings;
+    }
+
 
     public int getWidth() {
         return width;

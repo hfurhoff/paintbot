@@ -70,8 +70,10 @@ public class WorldStateConverter {
         String id = character.getPlayerId();
 
         int position = ws.getCharacterPosition(character);
+        int[] colouredPositions = ws.listPositionWithOwner(character.getPlayerId());
 
-        return new CharacterInfo(name, character.getPoints(), id, position, ws.listPositionWithOwner(character.getPlayerId()), character.getIsStunnedForTicks());
+        return new CharacterInfo(name, character.getPoints(), id, position, colouredPositions, character
+                .getIsStunnedForTicks());
     }
 
 }
