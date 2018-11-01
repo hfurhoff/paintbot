@@ -1,13 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import * as background from '../resources/background.jpg';
-import GameDirector from './GameDirector';
 
-export const GameScreen = () => (
-  <WindowContainer>
-    <GameDirector />
-  </WindowContainer>
-);
+import background from '../resources/background.jpg';
+
+import GameDirector from './GameDirector';
 
 const WindowContainer = styled.div`
   position: absolute;
@@ -21,3 +17,11 @@ const WindowContainer = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
 `;
+
+export default function GameScreen() {
+  return (
+    <WindowContainer>
+      <GameDirector />
+    </WindowContainer>
+  );
+}

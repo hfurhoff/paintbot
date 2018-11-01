@@ -1,7 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components';
+
 import { GameControllerColors } from '../common/Constants';
 import Config from '../Config';
+
 import GameBoardContainer from './gameboard/GameBoardContainer';
 import GameBoardFactory from './gameboard/GameBoardFactory';
 import { GameController } from './gamespeed/GameController';
@@ -22,21 +24,14 @@ interface State {
 }
 
 export default class GameContainer extends React.Component<Props, State> {
-  private readonly gameBoardFactory: GameBoardFactory;
+  private readonly gameBoardFactory = new GameBoardFactory();
 
-  public constructor(props: Props) {
-    super(props);
-    this.gameBoardFactory = new GameBoardFactory();
+  private transformGameMapToModel(gameMap: GameMap): Game {
+    return this.gameBoardFactory.getGameBoard(gameMap);
   }
 
-  public render() {
-    const {
-      gameSettings,
-      gameMap,
-      gameSpeedChange,
-      gameSpeedPause,
-      restartGame,
-    } = this.props;
+  render() {
+    const { gameSettings, gameMap, gameSpeedChange, gameSpeedPause, restartGame } = this.props;
     const game = this.transformGameMapToModel(gameMap);
     return (
       <div>
@@ -49,10 +44,7 @@ export default class GameContainer extends React.Component<Props, State> {
           />
         </HeaderContainer>
         <Container>
-          <ScoreBoardContainer
-            players={game.currentCharacters}
-            worldTick={game.worldTick}
-          />
+          <ScoreBoardContainer players={game.currentCharacters} worldTick={game.worldTick} />
           <div>
             <GameBoardContainer game={game} />
             <div
@@ -71,10 +63,6 @@ export default class GameContainer extends React.Component<Props, State> {
         </Container>
       </div>
     );
-  }
-
-  private transformGameMapToModel(gameMap: GameMap): Game {
-    return this.gameBoardFactory.getGameBoard(gameMap);
   }
 }
 

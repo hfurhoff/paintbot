@@ -1,13 +1,9 @@
-import * as React from 'react';
-import styled, { keyframes, StyledFunction } from 'styled-components';
+import React from 'react';
+import styled, { keyframes } from 'styled-components';
 
 interface Props {
   color: string;
 }
-
-const paintContainer: StyledFunction<
-  Props & React.HTMLProps<HTMLInputElement>
-> = styled.div;
 
 const Container = styled.div`
   height: 5rem;
@@ -32,7 +28,7 @@ const spread = keyframes`
   }
 `;
 
-const PaintContainer = paintContainer`
+const PaintContainer = styled.div<Props>`
   fill: ${props => props.color || 'white'};
   position: absolute;
   height: 112.5%;
@@ -43,11 +39,7 @@ const PaintContainer = paintContainer`
 `;
 
 export default class Paint extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-  }
-
-  public render() {
+  render() {
     return (
       <Container>
         <PaintContainer color={this.props.color}>
