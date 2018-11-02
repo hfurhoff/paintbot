@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { StandardColors } from '../common/Constants';
-import { HoverButton } from '../common/ui/HoverButton';
+import { DefaultButton } from '../common/ui/DefaultButton';
 import { Indent } from '../common/ui/Indent';
 import { Row } from '../common/ui/Row';
 import { Spacing } from '../common/ui/Spacing';
@@ -30,7 +30,7 @@ export default class WelcomeScreen extends React.Component<RouteComponentProps> 
             </Spacing>
             <Spacing>
               <Indent num={2}>
-                <HoverButton onClick={this.startGame}>Start</HoverButton>
+                <DefaultButton onClick={this.startGame}>Start</DefaultButton>
               </Indent>
             </Spacing>
           </Row>

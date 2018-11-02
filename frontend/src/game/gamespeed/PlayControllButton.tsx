@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { GameControllerColors, StandardColors } from '../../common/Constants';
-import { HoverButton } from '../../common/ui/HoverButton';
+import { DefaultButton } from '../../common/ui/DefaultButton';
 
 interface Props {
   playing: boolean;
@@ -11,13 +11,13 @@ interface Props {
 export const PlayControllButton = ({ playing, onClick }: Props) => {
   const playStatusText = playing ? 'Pause' : 'Play';
   return (
-    <HoverButton
+    <DefaultButton
       onClick={onClick}
       width={200}
       color={StandardColors.White}
       backgroundColor={GameControllerColors.PlayButton}
     >
       {playStatusText}
-    </HoverButton>
+    </DefaultButton>
   );
 };
