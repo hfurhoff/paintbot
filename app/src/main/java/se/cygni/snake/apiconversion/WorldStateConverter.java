@@ -1,16 +1,22 @@
 package se.cygni.snake.apiconversion;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.cygni.game.WorldState;
 import se.cygni.game.worldobject.CharacterImpl;
 import se.cygni.snake.api.model.BombingInfo;
 import se.cygni.snake.api.model.CharacterInfo;
 import se.cygni.snake.api.model.ColissionInfo;
 import se.cygni.snake.api.model.Map;
+import se.cygni.snake.game.WorldUpdater;
 import se.cygni.snake.player.IPlayer;
 
 import java.util.Set;
 
 public class WorldStateConverter {
+
+    private static final Logger log = LoggerFactory.getLogger(WorldStateConverter.class);
+
 
     public static Map convertWorldState(WorldState ws, long worldTick, Set<IPlayer> players) {
 
@@ -60,9 +66,11 @@ public class WorldStateConverter {
         try {
             CharacterImpl character = ws.getCharacterById(id);
             return getCharacterInfo(ws, character);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            log.error("Unexpected error when creating character info for " + id, e);
+        }
 
-        return new CharacterInfo(name, points, id, -1, ws.listPositionWithOwner(player.getPlayerId()), 0);
+        return new CharacterInfo(name, points, id, 10, false, ws.listPositionWithOwner(player.getPlayerId()), 0);
     }
 
     private static CharacterInfo getCharacterInfo(WorldState ws, CharacterImpl character) {
@@ -72,7 +80,7 @@ public class WorldStateConverter {
         int position = ws.getCharacterPosition(character);
         int[] colouredPositions = ws.listPositionWithOwner(character.getPlayerId());
 
-        return new CharacterInfo(name, character.getPoints(), id, position, colouredPositions, character
+        return new CharacterInfo(name, character.getPoints(), id, position, character.isCarryingBomb(), colouredPositions, character
                 .getIsStunnedForTicks());
     }
 

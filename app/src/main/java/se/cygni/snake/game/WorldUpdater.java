@@ -17,6 +17,7 @@ import se.cygni.game.worldobject.CharacterImpl;
 import se.cygni.game.worldobject.Empty;
 import se.cygni.game.worldobject.WorldObject;
 import se.cygni.snake.api.event.CharacterStunnedEvent;
+import se.cygni.snake.api.model.PointReason;
 import se.cygni.snake.api.model.StunReason;
 import se.cygni.snake.apiconversion.GameMessageConverter;
 import se.cygni.snake.event.InternalGameEvent;
@@ -67,7 +68,7 @@ public class WorldUpdater {
         );
 
         ConcurrentHashMap<Integer, List<String>> updatedPositions = new ConcurrentHashMap<>(actions.entrySet().stream()
-                .filter(e -> e.getValue().isMovement())
+                .filter(e -> e.getValue().isMovement() && canPerform(ws, e.getKey()))
                 .map(e -> getNextPosition(e, ws))
                 .collect(Collectors.groupingBy(Pair::getKey, Collectors.mapping(Pair::getValue, Collectors.toList()))));
 
@@ -111,48 +112,85 @@ public class WorldUpdater {
             }
         }
 
+        WorldState positionUpdatedWorld = new WorldState(ws.getWidth(), ws.getHeight(), tiles);
+
         Map<Integer, List<String>> positionsBombed = new HashMap<>();
         actions.entrySet().stream()
-                .filter(e -> e.getValue().equals(Action.EXPLODE) && ws.getCharacterById(e.getKey()).isCarryingBomb())
+                .filter(e ->
+                        e.getValue().equals(Action.EXPLODE) &&
+                        ws.getCharacterById(e.getKey()).isCarryingBomb() &&
+                                canPerform(ws, e.getKey())
+                )
                 .forEach(e -> {
                     String playerId = e.getKey();
-                    var player = nextWorld.getCharacterById(playerId);
+                    var player = positionUpdatedWorld.getCharacterById(playerId);
                     player.setCarryingBomb(false);
                     int position = player.getPosition();
-                    Arrays.stream(nextWorld.listAdjacentTiles(position))
-                            .forEach(adjacentPosition -> {
-                                List<String> playersBombingPosition = positionsBombed.getOrDefault(adjacentPosition, new LinkedList<>());
+                    Coordinate myCoordinate = positionUpdatedWorld.translatePosition(position);
+
+                    for(int dx = myCoordinate.getX() - gameFeatures.getExplosionRange();
+                        dx <= myCoordinate.getX() + gameFeatures.getExplosionRange();
+                        dx++
+                    ) {
+                        for(int dy = myCoordinate.getY() - gameFeatures.getExplosionRange();
+                            dy <= myCoordinate.getY() + gameFeatures.getExplosionRange();
+                            dy++) {
+
+                            Coordinate coordinate = new Coordinate(dx, dy);
+
+                            try {
+                                int currPos = positionUpdatedWorld.translateCoordinate(coordinate);
+                                positionUpdatedWorld.getTile(currPos);
+
+                                List<String> playersBombingPosition = positionsBombed.getOrDefault(currPos, new LinkedList<>());
                                 playersBombingPosition.add(playerId);
-                                positionsBombed.put(adjacentPosition, playersBombingPosition);
-                            });
+                                positionsBombed.put(currPos, playersBombingPosition);
+                            }  catch (OutOfBoundsException oobe) {
+                                // We don't care about this pos, keep going
+                            }
+                        }
+
+                    }
                 });
 
         nextWorld.setBombings(positionsBombed);
 
         positionsBombed.forEach((position, players) -> {
-            WorldObject content = nextWorld.getTile(position).getContent();
-            if (content instanceof Empty) {
-                // Randomly select one player to successfully bomb
-                String playerId = players.get(random.nextInt(players.size()));
-                tiles[position] = new Tile(new Empty(), playerId);
+            WorldObject content = positionUpdatedWorld.getTile(position).getContent();
+            // Randomly select one player to successfully bomb
+            String playerId = players.get(random.nextInt(players.size()));
+            if (content instanceof Empty || content instanceof Bomb) {
+                tiles[position] = new Tile(content, playerId);
             } else if (content instanceof Character) {
-                nextWorld.getCharacterAtPosition(position).setIsStunnedForTicks(gameFeatures.getNoOfTicksStunned());
+                // Can't stun yourself
+                if(!positionUpdatedWorld.getCharacterAtPosition(position).getPlayerId().equals(playerId)){
+                    positionUpdatedWorld.getCharacterAtPosition(position).setIsStunnedForTicks(gameFeatures.getNoOfTicksStunned());
+                }
             }
-
         });
 
+        playerManager.getLivePlayers().forEach(p -> {
+            int ownedTiles = positionUpdatedWorld.listPositionWithOwner(p.getPlayerId()).length;
+            p.addPoints(PointReason.OWNED_TILES, ownedTiles);
+            positionUpdatedWorld.getCharacterById(p.getPlayerId()).setPoints(p.getTotalPoints());
+        });
 
         return new WorldState(ws.getWidth(), ws.getHeight(), tiles, nextWorld.getCollisions(), nextWorld.getBombings());
+    }
 
+    private boolean canPerform(WorldState ws, String playerId) {
+        return ws.getCharacterById(playerId).getIsStunnedForTicks() == 0;
     }
 
 
     private void updateCharacterState(Tile[] tiles, int targetPosition, Character character, boolean hasPickedUpBomb) {
         Tile currentTile = tiles[character.getPosition()];
         tiles[character.getPosition()] = new Tile(new Empty(), currentTile.getOwnerID());
-        tiles[targetPosition] = new Tile(character, character.getPlayerId());
         character.setPosition(targetPosition);
-        character.setCarryingBomb(hasPickedUpBomb);
+        if(hasPickedUpBomb) {
+            character.setCarryingBomb(true);
+        }
+        tiles[targetPosition] = new Tile(character, character.getPlayerId());
     }
 
     private Pair<Integer, String> getNextPosition(Map.Entry<String, Action> updateEntry, WorldState ws) {

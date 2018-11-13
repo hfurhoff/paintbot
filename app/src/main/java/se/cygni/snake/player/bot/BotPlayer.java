@@ -5,6 +5,7 @@ import se.cygni.snake.api.event.*;
 import se.cygni.snake.api.model.CharacterAction;
 import se.cygni.snake.api.model.Map;
 import se.cygni.snake.api.model.TileContent;
+import se.cygni.snake.api.request.RegisterMove;
 import se.cygni.snake.client.MapCoordinate;
 import se.cygni.snake.client.MapUtil;
 import se.cygni.snake.player.BasePlayer;
@@ -19,6 +20,12 @@ public abstract class BotPlayer extends BasePlayer {
     public BotPlayer(String playerId, EventBus incomingEventbus) {
         this.playerId = playerId;
         this.incomingEventbus = incomingEventbus;
+    }
+
+    public void registerMove(MapUpdateEvent mapUpdateEvent, CharacterAction action) {
+        RegisterMove registerMove = new RegisterMove(mapUpdateEvent.getGameId(), mapUpdateEvent.getGameTick(), action);
+        registerMove.setReceivingPlayerId(playerId);
+        incomingEventbus.post(registerMove);
     }
 
     @Override

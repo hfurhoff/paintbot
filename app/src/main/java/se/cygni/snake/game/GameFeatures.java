@@ -39,13 +39,12 @@ public class GameFeatures {
     // snake collides with yours)
     private int pointsPerCausedStun = 5;
 
-
     // Number of rounds a character is protected after stun
     private int noOfTicksInvulnerableAfterStun = 3;
 
     // Number of rounds a character is stunned
 
-    private int noOfTicksStunned = 3;
+    private int noOfTicksStunned = 10;
     // The starting count for obstacles
 
     private int startObstacles = 5;
@@ -53,7 +52,9 @@ public class GameFeatures {
 
     private int startBombs = 0;
 
-    private int gameDurationInSeconds = 20; //TODO Dont forget to set this back to something reasonable
+    private int gameDurationInSeconds = 60; // TODO Dont forget to set this back to something reasonable
+
+    private int explosionRange = 4;
 
     /**
      * Enforces limits on some values
@@ -77,6 +78,10 @@ public class GameFeatures {
 
     public int getGameDurationInSeconds() {
         return gameDurationInSeconds;
+    }
+
+    public void setGameDurationInSeconds(int gameDurationInSeconds) {
+        this.gameDurationInSeconds = gameDurationInSeconds;
     }
 
     public int getNoOfTicksStunned() {
@@ -181,5 +186,13 @@ public class GameFeatures {
 
     public void setStartBombs(int startBombs) {
         this.startBombs = startBombs;
+    }
+
+    public int getExplosionRange() {
+        return explosionRange;
+    }
+
+    public void setExplosionRange(int explosionRange) {
+        this.explosionRange = explosionRange;
     }
 }

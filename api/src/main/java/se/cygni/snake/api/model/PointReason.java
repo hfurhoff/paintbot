@@ -7,6 +7,7 @@ public enum PointReason {
     NIBBLE,
     CAUSED_SNAKE_DEATH,
     LAST_SNAKE_ALIVE,
-    SUICIDE
+    SUICIDE,
+    OWNED_TILES,
 
 }

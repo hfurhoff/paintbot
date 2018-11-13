@@ -9,6 +9,7 @@ public class CharacterInfo {
     final int points;
     final String id;
     final int position;
+    final boolean isCarryingBomb;
     final int[] colouredPositions;
     final int stunnedForGameTicks;
     //TODO: Also include invulnerable state ticks?
@@ -19,6 +20,7 @@ public class CharacterInfo {
             @JsonProperty("points") int points,
             @JsonProperty("playerId") String playerId,
             @JsonProperty("position") int position,
+            @JsonProperty("isCarryingBomb") boolean isCarryingBomb,
             @JsonProperty("colouredPositions") int[] colouredPositions,
             @JsonProperty("stunnedForGameTicks") int stunnedForGameTicks
     )
@@ -27,6 +29,7 @@ public class CharacterInfo {
         this.points = points;
         this.id = playerId;
         this.position = position;
+        this.isCarryingBomb = isCarryingBomb;
         this.colouredPositions = colouredPositions;
         this.stunnedForGameTicks = stunnedForGameTicks;
     }
@@ -46,6 +49,10 @@ public class CharacterInfo {
 
     public int getPosition() {
         return position;
+    }
+
+    public boolean isCarryingBomb() {
+        return isCarryingBomb;
     }
 
     public int getStunnedForGameTicks() {
