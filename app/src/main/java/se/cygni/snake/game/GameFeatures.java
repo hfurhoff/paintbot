@@ -15,15 +15,15 @@ public class GameFeatures {
     // Randomly place obstacles
     private boolean obstaclesEnabled = true;
 
-    // Randomly place food
+    // Randomly place bombs
     private boolean bombsEnabled = true;
 
-    // Likelihood (in percent) that a new food will be
+    // Likelihood (in percent) that a new bomb will be
     // added to the world
     private int addBombLikelihood = 15;
 
     // Likelihood (in percent) that a
-    // food will be removed from the world
+    // bomb will be removed from the world
     private int removeBombLikelihood = 5;
 
 
