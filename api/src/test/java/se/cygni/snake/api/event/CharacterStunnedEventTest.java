@@ -10,7 +10,7 @@ public class CharacterStunnedEventTest {
 
     @Test
     public void testSerializationSnakeDeadEvent() throws Exception {
-        CharacterStunnedEvent sde = new CharacterStunnedEvent(StunReason.CollisionWithWall, "playerId", 5, 10, "6666", 99, durationInTicks);
+        CharacterStunnedEvent sde = new CharacterStunnedEvent(StunReason.CollisionWithWall, 7,"playerId", 5, 10, "6666", 99);
         TestUtil.populateBaseData(sde, "rPlayerId");
 
         String serialized = GameMessageParser.encodeMessage(sde);
@@ -18,6 +18,7 @@ public class CharacterStunnedEventTest {
         CharacterStunnedEvent parsedSde = (CharacterStunnedEvent)GameMessageParser.decodeMessage(serialized);
 
         assertEquals(StunReason.CollisionWithWall, parsedSde.getStunReason());
+        assertEquals(7, parsedSde.getDurationInTicks());
         assertEquals("playerId", parsedSde.getPlayerId());
         assertEquals(5, parsedSde.getX());
         assertEquals(10, parsedSde.getY());

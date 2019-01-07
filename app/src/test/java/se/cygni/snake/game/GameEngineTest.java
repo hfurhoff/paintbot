@@ -34,7 +34,6 @@ public class GameEngineTest {
         GameFeatures gameFeatures = new GameFeatures();
         gameFeatures.setTimeInMsPerTick(1000);
         gameFeatures.setMaxNoofPlayers(25);
-        gameFeatures.setSpontaneousGrowthEveryNWorldTick(2);
         gameFeatures.setTrainingGame(true);
 
         GameManager gameManager = new GameManager(new EventBus());
@@ -63,96 +62,5 @@ public class GameEngineTest {
             } catch (Exception e) {
             }
         } while (game.getGameEngine().isGameRunning());
-    }
-
-    @Test
-    public void testStateMerge() throws Exception {
-        WorldState ws = new WorldState(10, 10);
-
-        Character[] parts1 = SnakeTestUtil.createSnake("test1", "id1", 22, 32);
-        Character[] parts2 = SnakeTestUtil.createSnake("test2", "id2", 42, 43);
-
-
-        ws = SnakeTestUtil.addSnake(ws, parts1);
-        ws = SnakeTestUtil.addSnake(ws, parts2);
-
-        PerformCharacterAction m1 = new PerformCharacterAction(ws.getCharacterAtPosition(22), Action.UP);
-        PerformCharacterAction m2 = new PerformCharacterAction(ws.getCharacterAtPosition(42), Action.DOWN);
-        PerformCharacterAction[] moves = {m1, m2};
-
-        int noofSnakes = 2;
-
-        KeepOnlyObjectsOfType worldBaseLine = new KeepOnlyObjectsOfType(new Class[] {Empty.class, Bomb.class, Obstacle.class});
-
-        List<WorldState> worldStates = new ArrayList<>();
-        worldStates.add(worldBaseLine.transform(ws));
-
-        for (int i = 0; i < noofSnakes; i++) {
-            KeepOnlySnakeWithId removeOtherSnakes = new KeepOnlySnakeWithId("id" + (i+1));
-            WorldState oneSnakeWorld = removeOtherSnakes.transform(ws);
-            worldStates.add(moves[i].transform(oneSnakeWorld));
-        }
-
-        TileMultipleContent[] mTiles = mergeStates(worldStates);
-        Tile[] tiles = createWorldState(mTiles);
-        WorldState newState = new WorldState(ws.getWidth(), ws.getHeight(), tiles);
-        System.out.println("done");
-
-        assertEquals(52, newState.getCharacterAtPosition(52).getPosition());
-        assertArrayEquals(new int[] {52, 42}, newState.getCharacterPosition(newState.getCharacterAtPosition(52)));
-        assertEquals(12, newState.getCharacterAtPosition(12).getPosition());
-        assertArrayEquals(new int[] {12, 22}, newState.getCharacterPosition(newState.getCharacterAtPosition(12)));
-    }
-
-
-    private Tile[] createWorldState(TileMultipleContent[] mTiles) {
-        Tile[] tiles = new Tile[mTiles.length];
-
-        IntStream.range(0, mTiles.length).forEach(
-                pos -> {
-                    WorldObject wo = null;
-                    if (mTiles[pos].hasContent())
-                        wo = mTiles[pos].getContents().get(0);
-                    if (wo == null)
-                        tiles[pos] = new Tile();
-                    else
-                        tiles[pos] = new Tile(wo);
-                }
-        );
-        return tiles;
-    }
-
-    private TileMultipleContent[] mergeStates(List<WorldState> worldStates) {
-        WorldState firstState = worldStates.get(0);
-        TileMultipleContent[] mTiles = convertToTileMultipleContent(
-                firstState.getTiles());
-
-        for (int i = 1; i < worldStates.size(); i++) {
-            mergeTiles(mTiles, worldStates.get(i).getTiles());
-        }
-
-        return mTiles;
-    }
-
-    private TileMultipleContent[] convertToTileMultipleContent(Tile[] tiles) {
-        TileMultipleContent[] mTiles = new TileMultipleContent[tiles.length];
-        IntStream.range(0, tiles.length).forEach(
-                pos -> {
-                    WorldObject wo = tiles[pos].getContent();
-                    mTiles[pos] = new TileMultipleContent(wo);
-                }
-        );
-        return mTiles;
-    }
-
-    private TileMultipleContent[] mergeTiles(TileMultipleContent[] first, Tile[] second) {
-        IntStream.range(0, first.length).forEach(
-                pos -> {
-                    System.out.println("merging pos: " + pos + " with "+second[pos].getContent());
-                    WorldObject contentSecond = second[pos].getContent();
-                    first[pos].addContent(contentSecond);
-                }
-        );
-        return first;
     }
 }

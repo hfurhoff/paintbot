@@ -468,50 +468,6 @@ public class WorldStateTest {
         assertThat(ArrayUtils.toObject(adjacent), arrayContainingInAnyOrder(209,223));
     }
 
-    @Test
-    public void testGetSnakeSpread() throws Exception {
-        WorldState ws = new WorldState(10, 10);
-
-        Character[] parts = SnakeTestUtil.createSnake("test", "id", 13,23,24,25,35);
-        ws = SnakeTestUtil.addSnake(ws, parts);
-
-        int[] snakeSpread = ws.getCharacterPosition((CharacterImpl)parts[0]);
-
-        assertEquals(5, snakeSpread.length);
-        assertThat(ArrayUtils.toObject(snakeSpread), arrayContaining(13,23,24,25,35));
-    }
-
-    @Test
-    public void testGetSnakeHeadForBodyAt() throws Exception {
-        WorldState ws = new WorldState(10, 10);
-
-        Character[] parts = SnakeTestUtil.createSnake("test", "id", 13,23,24,25,35);
-        ws = SnakeTestUtil.addSnake(ws, parts);
-
-        CharacterImpl head = ws.getCharacterAtPosition(25);
-
-        assertEquals(parts[0], head);
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testGetSnakeHeadForBodyAtNonSnakePosition() throws Exception {
-        WorldState ws = new WorldState(10, 10);
-
-        Character[] parts = SnakeTestUtil.createSnake("test", "id", 63, 64, 65, 55, 45);
-        ws = SnakeTestUtil.addSnake(ws, parts);
-        ws.getCharacterAtPosition(101);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testGetSnakeHeadForBodyAtWithSnakeWithoutHead() throws Exception {
-        WorldState ws = new WorldState(10, 10);
-
-        Character[] parts = SnakeTestUtil.createSnake("test", "id", 70, 71, 72, 73, 74, 84, 94);
-
-        ws = SnakeTestUtil.addSnake(ws, ArrayUtils.subarray(parts, 1, 6));
-        ws.getCharacterAtPosition(73);
-    }
-
     @Test @Ignore
     public void testPrintCoordinatePosition() {
         int size = 10;

@@ -6,28 +6,6 @@ import org.junit.Test;
 public class GameFeaturesTest {
 
     @Test
-    public void testStartSnakeLengthIsMax10() throws Exception {
-        GameFeatures gf = new GameFeatures();
-        gf.setStartSnakeLength(22);
-        gf.applyValidation();
-
-        Assert.assertEquals(10, gf.getStartSnakeLength());
-    }
-
-    @Test
-    public void testStartSnakeLengthIsMin1() throws Exception {
-        GameFeatures gf = new GameFeatures();
-        gf.setStartSnakeLength(-12);
-        gf.applyValidation();
-
-        Assert.assertEquals(1, gf.getStartSnakeLength());
-
-        gf.setStartSnakeLength(0);
-        gf.applyValidation();
-        Assert.assertEquals(1, gf.getStartSnakeLength());
-    }
-
-    @Test
     public void testMaxNoofPlayersIsMax20() throws Exception {
         GameFeatures gf = new GameFeatures();
         gf.setMaxNoofPlayers(99);
@@ -48,20 +26,6 @@ public class GameFeaturesTest {
         gf.applyValidation();
 
         Assert.assertEquals(2, gf.getMaxNoofPlayers());
-    }
-
-    @Test
-    public void testSpontaneousGrowthEveryNWorldTickIsMin2() throws Exception {
-        GameFeatures gf = new GameFeatures();
-        gf.setSpontaneousGrowthEveryNWorldTick(-2);
-        gf.applyValidation();
-
-        Assert.assertEquals(2, gf.getSpontaneousGrowthEveryNWorldTick());
-
-        gf.setSpontaneousGrowthEveryNWorldTick(0);
-        gf.applyValidation();
-
-        Assert.assertEquals(2, gf.getSpontaneousGrowthEveryNWorldTick());
     }
 
     @Test

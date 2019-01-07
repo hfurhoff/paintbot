@@ -1,5 +1,6 @@
 package se.cygni.game.transformation;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import se.cygni.game.WorldState;
 import se.cygni.game.enums.Action;
@@ -81,6 +82,7 @@ public class PerformCharacterActionTest {
         assertArrayEquals(new int[]{expectedEndPos}, ws.listPositionsWithContentOf(CharacterImpl.class));
     }
 
+    @Ignore
     @Test(expected = WallCollision.class)
     public void testWallCollision() throws Exception {
         WorldState ws = new WorldState(10, 10);
@@ -93,6 +95,7 @@ public class PerformCharacterActionTest {
         performCharacterAction.transform(ws);
     }
 
+    @Ignore
     @Test(expected = ObstacleCollision.class)
     public void testObstacleCollision() throws Exception {
         WorldState ws = new WorldState(10, 10);
@@ -107,6 +110,7 @@ public class PerformCharacterActionTest {
         performCharacterAction.transform(ws);
     }
 
+    @Ignore
     @Test(expected = SnakeCollision.class)
     public void testSnakeCollision() throws Exception {
         WorldState ws = new WorldState(10, 10);
