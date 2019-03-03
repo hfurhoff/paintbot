@@ -41,7 +41,7 @@ jobs:
 
       - run: 
           name: Run build and tests
-          command: ./gradlew build
+          command: ./gradlew build test
 
 workflows:
   version: 2
