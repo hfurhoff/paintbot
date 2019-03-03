@@ -12,4 +12,19 @@ public enum Action {
     public boolean isMovement() {
         return isMovement;
     }
+
+    public boolean isOppositeMovement(Action value) {
+        switch (value) {
+            case LEFT:
+                return this == RIGHT;
+            case RIGHT:
+                return this == LEFT;
+            case UP:
+                return this == DOWN;
+            case DOWN:
+                return this == UP;
+            default:
+                return false;
+        }
+    }
 }
