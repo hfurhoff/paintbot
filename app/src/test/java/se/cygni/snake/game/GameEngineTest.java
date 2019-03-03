@@ -44,12 +44,14 @@ public class GameEngineTest {
 
     @Test
     public void testGame() {
-        game.registerPlayer(new RegisterPlayer("emil", new GameSettings()));
-        game.registerPlayer(new RegisterPlayer("lisa", new GameSettings()));
+        RegisterPlayer emil = new RegisterPlayer("emil", new GameSettings());
+        emil.setReceivingPlayerId("emil");
+        game.registerPlayer(emil);
+        RegisterPlayer lisa = new RegisterPlayer("lisa", new GameSettings());
+        lisa.setReceivingPlayerId("lisa");
+        game.registerPlayer(lisa);
 
         game.startGame();
-
-
     }
 
     @Test @Ignore
