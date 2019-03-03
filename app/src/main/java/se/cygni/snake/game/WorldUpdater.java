@@ -11,8 +11,12 @@ import se.cygni.game.enums.Action;
 import se.cygni.game.exception.OutOfBoundsException;
 import se.cygni.game.exception.TransformationException;
 import se.cygni.game.random.XORShiftRandom;
-import se.cygni.game.worldobject.*;
+import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Character;
+import se.cygni.game.worldobject.CharacterImpl;
+import se.cygni.game.worldobject.Empty;
+import se.cygni.game.worldobject.Obstacle;
+import se.cygni.game.worldobject.WorldObject;
 import se.cygni.snake.api.event.CharacterStunnedEvent;
 import se.cygni.snake.api.model.PointReason;
 import se.cygni.snake.api.model.StunReason;
@@ -20,10 +24,13 @@ import se.cygni.snake.apiconversion.GameMessageConverter;
 import se.cygni.snake.event.InternalGameEvent;
 import se.cygni.snake.player.IPlayer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -61,7 +68,7 @@ public class WorldUpdater {
                 )
         );
         ConcurrentHashMap<Integer, List<String>> updatedPositions = new ConcurrentHashMap<>();
-        var stunnedPlayers = new LinkedList<String>();
+        var stunnedPlayers = new HashSet<String>();
 
         actions.entrySet().forEach(entry -> {
             String player = entry.getKey();
@@ -89,20 +96,29 @@ public class WorldUpdater {
                 String player = positionPlayerPair.getValue();
                 Integer collidingPosition = positionPlayerPair.getKey();
                 stunnedPlayers.add(player);
-                updatePosition(updatedPositions, player, originalPositions.get(player));
                 List<String> playersAtCollidingPosition = updatedPositions.get(collidingPosition);
-                List<String> withoutPlayer = playersAtCollidingPosition.stream().filter(p -> !p.equals(player)).collect(toList());
+                List<String> withoutPlayer = playersAtCollidingPosition.stream().filter(p -> !p.equals(player))
+                        .collect(toList());
                 updatedPositions.put(collidingPosition, withoutPlayer);
+                updatePosition(updatedPositions, player, originalPositions.get(player));
             });
         }
 
+        updatedPositions.forEach((p, l) -> {
+            if (l.isEmpty()) {
+                updatedPositions.remove(p);
+            }
+        });
+
         Tile[] tiles = nextWorld.getTiles();
 
-        for (var e : updatedPositions.entrySet()) {
-            for (var p : e.getValue()) {
-                int targetPosition = e.getKey();
-                var hasPickedUpBomb = ws.getTile(targetPosition).getContent() instanceof Bomb;
-                updateCharacterState(tiles, targetPosition, nextWorld.getCharacterById(p), hasPickedUpBomb);
+        for (int position = 0; position < tiles.length; position++) {
+            if (updatedPositions.containsKey(position)) {
+                String playerId = updatedPositions.get(position).get(0);
+                var hasPickedUpBomb = ws.getTile(position).getContent() instanceof Bomb;
+                updateCharacterState(tiles, position, nextWorld.getCharacterById(playerId), hasPickedUpBomb);
+            } else if (originalPositions.containsValue(position)) {
+                tiles[position] = new Tile(new Empty(), ws.getTile(position).getOwnerID());
             }
         }
 
@@ -203,8 +219,6 @@ public class WorldUpdater {
 
 
     private void updateCharacterState(Tile[] tiles, int targetPosition, Character character, boolean hasPickedUpBomb) {
-        Tile currentTile = tiles[character.getPosition()];
-        tiles[character.getPosition()] = new Tile(new Empty(), currentTile.getOwnerID());
         character.setPosition(targetPosition);
         if (hasPickedUpBomb) {
             character.setCarryingBomb(true);
