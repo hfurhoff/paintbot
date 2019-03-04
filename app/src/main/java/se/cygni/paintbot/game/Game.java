@@ -23,7 +23,11 @@ import se.cygni.paintbot.apiconversion.GameSettingsConverter;
 import se.cygni.paintbot.event.InternalGameEvent;
 import se.cygni.paintbot.player.IPlayer;
 import se.cygni.paintbot.player.RemotePlayer;
-import se.cygni.paintbot.player.bot.*;
+import se.cygni.paintbot.player.bot.AggroBot;
+import se.cygni.paintbot.player.bot.BotPlayer;
+import se.cygni.paintbot.player.bot.PoweredBot;
+import se.cygni.paintbot.player.bot.RandomBot;
+import se.cygni.paintbot.player.bot.StraightBot;
 
 import java.util.UUID;
 

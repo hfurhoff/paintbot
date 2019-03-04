@@ -4,13 +4,8 @@ import com.google.common.eventbus.EventBus;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import se.cygni.game.testutil.PaintbotTestUtil;
-import se.cygni.game.transformation.KeepOnlyPaintbotWithId;
 import se.cygni.paintbot.api.model.GameSettings;
 import se.cygni.paintbot.api.request.RegisterPlayer;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 
 public class GameEngineTest {
 

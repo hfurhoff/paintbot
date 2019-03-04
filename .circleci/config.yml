@@ -39,7 +39,7 @@ jobs:
           paths:
             - ~/.gradle/caches
 
-      - run: 
+      - run:
           name: Run build and tests
           command: ./gradlew build test
 
