@@ -39,8 +39,6 @@ public class GameEngineTest {
         lisa.setReceivingPlayerId("id-"+lisa.getPlayerName());
         game.registerPlayer(lisa);
         game.startGame();
-
-
     }
 
     @Test @Ignore

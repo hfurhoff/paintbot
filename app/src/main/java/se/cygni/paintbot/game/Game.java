@@ -203,7 +203,7 @@ public class Game {
         for (int i = 0; i < gameFeatures.getMaxNoofPlayers() - 1; i++) {
             BotPlayer bot;
 
-            switch (Math.abs(botSelector.nextInt() % 4)) {
+            switch (Math.abs(botSelector.nextInt() % 5)) {
                 case 0:
                     bot = new RandomBot(UUID.randomUUID().toString(), incomingEventBus);
                     break;
@@ -213,12 +213,15 @@ public class Game {
                 case 2:
                     bot = new PoweredBot(UUID.randomUUID().toString(), incomingEventBus);
                     break;
+                case 3:
+                    bot = new AggroBot(UUID.randomUUID().toString(), incomingEventBus);
+                    break;
                 default:
                     bot = new StraightBot(UUID.randomUUID().toString(), incomingEventBus);
                     break;
             }
 
-            addPlayer(new PoweredBot(UUID.randomUUID().toString(), incomingEventBus));
+            addPlayer(bot);
         }
     }
 
