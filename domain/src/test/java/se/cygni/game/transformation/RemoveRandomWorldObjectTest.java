@@ -2,7 +2,7 @@ package se.cygni.game.transformation;
 
 import org.junit.Test;
 import se.cygni.game.WorldState;
-import se.cygni.game.testutil.SnakeTestUtil;
+import se.cygni.game.testutil.PaintbotTestUtil;
 import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Obstacle;
 
@@ -13,8 +13,8 @@ public class RemoveRandomWorldObjectTest {
 
     @Test
     public void testRemoveObstacle() throws Exception {
-        WorldState ws = SnakeTestUtil.createWorld(Obstacle.class, 10, 10, 9, 12, 18);
-        ws = SnakeTestUtil.replaceWorldObjectAt(ws, new Bomb(), 10);
+        WorldState ws = PaintbotTestUtil.createWorld(Obstacle.class, 10, 10, 9, 12, 18);
+        ws = PaintbotTestUtil.replaceWorldObjectAt(ws, new Bomb(), 10);
 
         RemoveRandomWorldObject<Obstacle> removeTransformation = new RemoveRandomWorldObject<>(Obstacle.class);
 
@@ -26,7 +26,7 @@ public class RemoveRandomWorldObjectTest {
 
     @Test
     public void testNothingChangesIfObjectTypeDoesntExists() throws Exception {
-        WorldState ws = SnakeTestUtil.createWorld(Obstacle.class, 10, 10, 9, 12, 18);
+        WorldState ws = PaintbotTestUtil.createWorld(Obstacle.class, 10, 10, 9, 12, 18);
 
         RemoveRandomWorldObject<Bomb> removeTransformation = new RemoveRandomWorldObject<>(Bomb.class);
 
@@ -38,7 +38,7 @@ public class RemoveRandomWorldObjectTest {
 
     @Test
     public void testTransformWithNulls() throws Exception {
-        WorldState ws = SnakeTestUtil.createWorld(Obstacle.class, 10, 10, 9, 12, 18);
+        WorldState ws = PaintbotTestUtil.createWorld(Obstacle.class, 10, 10, 9, 12, 18);
         RemoveRandomWorldObject<Bomb> removeTransformation = new RemoveRandomWorldObject<>(null);
         ws = removeTransformation.transform(ws);
     }

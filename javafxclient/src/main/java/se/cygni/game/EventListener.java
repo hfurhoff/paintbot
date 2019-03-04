@@ -1,12 +1,12 @@
 package se.cygni.game;
 
-import se.cygni.snake.api.event.GameEndedEvent;
-import se.cygni.snake.api.event.GameStartingEvent;
-import se.cygni.snake.api.event.MapUpdateEvent;
-import se.cygni.snake.api.event.SnakeDeadEvent;
-import se.cygni.snake.api.exception.InvalidPlayerName;
-import se.cygni.snake.api.response.PlayerRegistered;
-import se.cygni.snake.eventapi.response.ActiveGamesList;
+import se.cygni.paintbot.api.event.GameEndedEvent;
+import se.cygni.paintbot.api.event.GameStartingEvent;
+import se.cygni.paintbot.api.event.MapUpdateEvent;
+import se.cygni.paintbot.api.event.PaintbotDeadEvent;
+import se.cygni.paintbot.api.exception.InvalidPlayerName;
+import se.cygni.paintbot.api.response.PlayerRegistered;
+import se.cygni.paintbot.eventapi.response.ActiveGamesList;
 
 public interface EventListener {
 
@@ -16,7 +16,7 @@ public interface EventListener {
 
     public void onMapUpdate(MapUpdateEvent mapUpdateEvent);
 
-    public void onSnakeDead(SnakeDeadEvent snakeDeadEvent);
+    public void onPaintbotDead(PaintbotDeadEvent paintbotDeadEvent);
 
     public void onGameEnded(GameEndedEvent gameEndedEvent);
 

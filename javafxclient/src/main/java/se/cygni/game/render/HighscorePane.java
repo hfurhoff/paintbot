@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import se.cygni.snake.api.model.SnakeInfo;
+import se.cygni.paintbot.api.model.PaintbotInfo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +35,7 @@ public class HighscorePane extends GridPane {
         setHalignment(title, HPos.CENTER);
     }
 
-    public void setSnakeInfos(SnakeInfo[] snakeInfos, Map<String, SnakeColor> snakeColorMap) {
+    public void setPaintbotInfos(PaintbotInfo[] paintbotInfos, Map<String, PaintbotColor> paintbotColorMap) {
         this.getChildren().clear();
 
         addTitle();
@@ -46,7 +46,7 @@ public class HighscorePane extends GridPane {
 
         int c = 2;
 
-        List<SnakeInfo> snakeInfosSorted = Arrays.asList(snakeInfos)
+        List<PaintbotInfo> paintbotInfosSorted = Arrays.asList(paintbotInfos)
                 .stream()
                 .sorted((a, b) -> {
                     if (a.getPoints() == b.getPoints()) {
@@ -59,27 +59,27 @@ public class HighscorePane extends GridPane {
                 })
                 .collect(Collectors.toList());
 
-        for (SnakeInfo snakeInfo : snakeInfosSorted) {
+        for (PaintbotInfo paintbotInfo : paintbotInfosSorted) {
 
             Text pos = new Text((c - 1) + ".");
             add(pos, 0, c);
             setHalignment(pos, HPos.RIGHT);
 
-            Color snakeColour = Color.BLACK;
-            if (snakeColorMap.containsKey(snakeInfo.getId())) {
-                snakeColour = snakeColorMap.get(snakeInfo.getId()).body;
+            Color paintbotColour = Color.BLACK;
+            if (paintbotColorMap.containsKey(paintbotInfo.getId())) {
+                paintbotColour = paintbotColorMap.get(paintbotInfo.getId()).body;
             }
 
-            Text name = new Text(snakeInfo.getName());
-            name.setFill(snakeColour);
+            Text name = new Text(paintbotInfo.getName());
+            name.setFill(paintbotColour);
             add(name, 1, c);
             setHalignment(name, HPos.LEFT);
 
-            Text points = new Text(snakeInfo.getPoints() + "");
+            Text points = new Text(paintbotInfo.getPoints() + "");
             add(points, 2, c);
             setHalignment(points, HPos.RIGHT);
 
-            Text length = new Text(snakeInfo.getLength() + "");
+            Text length = new Text(paintbotInfo.getLength() + "");
             add(length, 3, c);
             setHalignment(length, HPos.RIGHT);
 

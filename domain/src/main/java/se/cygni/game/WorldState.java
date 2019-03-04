@@ -92,10 +92,10 @@ public class WorldState {
         return getTile(position).getContent().getClass() == clazz;
     }
 
-    public int getPositionOfSnakeHead(String playerId) {
-        int[] snakeHeadPositions = listPositionsWithContentOf(CharacterImpl.class);
+    public int getPositionOfPaintbotHead(String playerId) {
+        int[] paintbotHeadPositions = listPositionsWithContentOf(CharacterImpl.class);
 
-        for (int position : snakeHeadPositions) {
+        for (int position : paintbotHeadPositions) {
             CharacterImpl sh = (CharacterImpl)getTile(position).getContent();
             if (sh.getPlayerId().equals(playerId))
                 return position;
@@ -247,10 +247,10 @@ public class WorldState {
 
     public int[] listEmptyValidPositions() {
         int[] emptyPositions = listEmptyPositions();
-        int[] snakeAdjacentPositions = listPositionsAdjacentToCharacters();
+        int[] paintbotAdjacentPositions = listPositionsAdjacentToCharacters();
 
         return IntStream.of(emptyPositions).filter(pos ->
-            !ArrayUtils.contains(snakeAdjacentPositions, pos)
+            !ArrayUtils.contains(paintbotAdjacentPositions, pos)
         ).toArray();
     }
 

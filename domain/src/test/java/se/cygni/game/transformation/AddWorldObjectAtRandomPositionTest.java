@@ -3,7 +3,7 @@ package se.cygni.game.transformation;
 import org.junit.Test;
 import se.cygni.game.Tile;
 import se.cygni.game.WorldState;
-import se.cygni.game.testutil.SnakeTestUtil;
+import se.cygni.game.testutil.PaintbotTestUtil;
 import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Empty;
 import se.cygni.game.worldobject.Obstacle;
@@ -78,7 +78,7 @@ public class AddWorldObjectAtRandomPositionTest {
     public void testSameWordStateIsReturnedIfAlreadyFull() throws Exception {
 
         // Create world full of Obstacles
-        WorldState ws = SnakeTestUtil.createWorld(Obstacle.class, 10, 10, IntStream.range(0,100).toArray());
+        WorldState ws = PaintbotTestUtil.createWorld(Obstacle.class, 10, 10, IntStream.range(0,100).toArray());
 
         Bomb bomb = new Bomb();
         AddWorldObjectAtRandomPosition randomFood = new AddWorldObjectAtRandomPosition(bomb);
@@ -92,8 +92,8 @@ public class AddWorldObjectAtRandomPositionTest {
     public void testWithOnlyOneFreeTile() throws Exception {
 
         // Create world full of Obstacles
-        WorldState ws = SnakeTestUtil.createWorld(Obstacle.class, 10, 10, IntStream.range(0,100).toArray());
-        ws = SnakeTestUtil.replaceWorldObjectAt(ws, new Empty(), 50);
+        WorldState ws = PaintbotTestUtil.createWorld(Obstacle.class, 10, 10, IntStream.range(0,100).toArray());
+        ws = PaintbotTestUtil.replaceWorldObjectAt(ws, new Empty(), 50);
 
         Bomb bomb = new Bomb();
         AddWorldObjectAtRandomPosition randomFood = new AddWorldObjectAtRandomPosition(bomb);

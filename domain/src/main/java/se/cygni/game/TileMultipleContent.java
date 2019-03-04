@@ -111,14 +111,14 @@ public class TileMultipleContent {
         contents.remove(getFirstContentOfType(type));
     }
 
-    public List<CharacterImpl> listOffendingSnakeHeads() {
+    public List<CharacterImpl> listOffendingPaintbotHeads() {
         return listContentsOfType(CharacterImpl.class);
     }
 
-    public List<String> listOffendingSnakeHeadIds() {
+    public List<String> listOffendingPaintbotHeadIds() {
         return listContentsOfType(CharacterImpl.class)
                 .stream()
-                .map(snakeHead -> snakeHead.getPlayerId())
+                .map(paintbotHead -> paintbotHead.getPlayerId())
                 .collect(Collectors.toList());
     }
 
@@ -153,15 +153,15 @@ public class TileMultipleContent {
         return false;
     }
 
-    public List<String> listSnakeIdsPresent() {
-        List<String> snakeIds = new ArrayList<>();
+    public List<String> listPaintbotIdsPresent() {
+        List<String> paintbotIds = new ArrayList<>();
 
         for (WorldObject wo : contents) {
             if (wo instanceof Character) {
-                snakeIds.add(((Character) wo).getPlayerId());
+                paintbotIds.add(((Character) wo).getPlayerId());
             }
         }
-        return snakeIds;
+        return paintbotIds;
     }
 
     //Check if a tile contains two character at the same time (useful to know if collisons are to be handled)

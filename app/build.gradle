@@ -24,7 +24,7 @@ apply plugin: "com.gorylenko.gradle-git-properties"
 
 
 jar {
-    baseName = 'snakebot-app'
+    baseName = 'paintbot-app'
 }
 
 processResources {
@@ -46,7 +46,7 @@ project.ext {
 //}
 
 pitest {
-    targetClasses = ['se.cygni.snake.*']
+    targetClasses = ['se.cygni.paintbot.*']
     threads = 4
     outputFormats = ['XML', 'HTML']
 }

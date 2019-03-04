@@ -5,7 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import se.cygni.game.enums.Action;
 import se.cygni.game.exception.OutOfBoundsException;
-import se.cygni.game.testutil.SnakeTestUtil;
+import se.cygni.game.testutil.PaintbotTestUtil;
 import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.CharacterImpl;
 import se.cygni.game.worldobject.Obstacle;
@@ -59,8 +59,8 @@ public class WorldStateTest {
         Bomb f1 = new Bomb();
         Obstacle o1 = new Obstacle();
 
-        ws = SnakeTestUtil.replaceWorldObjectAt(ws, f1, 0);
-        ws = SnakeTestUtil.replaceWorldObjectAt(ws, o1, 99);
+        ws = PaintbotTestUtil.replaceWorldObjectAt(ws, f1, 0);
+        ws = PaintbotTestUtil.replaceWorldObjectAt(ws, o1, 99);
 
         assertThat(ws.getTile(0).getContent(), equalTo(f1));
         assertThat(ws.getTile(99).getContent(), equalTo(o1));
@@ -102,7 +102,7 @@ public class WorldStateTest {
     @Test
     public void testIsTileEmpty() throws Exception {
         // Place a food on tile 12 => coordinate 2,1
-        WorldState ws = SnakeTestUtil.createWorld(Bomb.class, 10, 10, 12);
+        WorldState ws = PaintbotTestUtil.createWorld(Bomb.class, 10, 10, 12);
 
         assertFalse(ws.isTileEmpty(12));
         assertTrue(ws.isTileEmpty(0));
@@ -201,7 +201,7 @@ public class WorldStateTest {
     @Test
     public void testHasAdjacentFilledTile() throws Exception {
         int[] obstaclePositions = new int[] { 2, 6, 85 };
-        WorldState ws = SnakeTestUtil.createWorld(Obstacle.class, 10, 10, obstaclePositions);
+        WorldState ws = PaintbotTestUtil.createWorld(Obstacle.class, 10, 10, obstaclePositions);
 
         int[] adjacentPositions = new int[] {1, 12, 3, 5, 16, 7, 75, 86, 95, 84};
 
@@ -220,7 +220,7 @@ public class WorldStateTest {
     @Test
     public void testListEmptyPositionsWithPadding() throws Exception {
         int[] obstaclePositions = new int[] { 2, 6, 85 };
-        WorldState ws = SnakeTestUtil.createWorld(Obstacle.class, 10, 10, obstaclePositions);
+        WorldState ws = PaintbotTestUtil.createWorld(Obstacle.class, 10, 10, obstaclePositions);
 
         int[] adjacentPositions = new int[] {1, 12, 3, 5, 16, 7, 75, 86, 95, 84};
 
@@ -244,7 +244,7 @@ public class WorldStateTest {
     @Test
     public void testListEmptyPositions_NotAllEmpty() throws Exception {
 
-        WorldState ws = SnakeTestUtil.createWorld(Bomb.class, 10, 10, new int[] { 50 });
+        WorldState ws = PaintbotTestUtil.createWorld(Bomb.class, 10, 10, new int[] { 50 });
 
         int[] emptyPositions = ws.listEmptyPositions();
         assertEquals(99, emptyPositions.length);
@@ -256,7 +256,7 @@ public class WorldStateTest {
     public void testListEmptyPositions() throws Exception {
 
         int[] foodPositions = new int[] { 2, 6, 85 };
-        WorldState ws = SnakeTestUtil.createWorld(Bomb.class, 10, 10, foodPositions);
+        WorldState ws = PaintbotTestUtil.createWorld(Bomb.class, 10, 10, foodPositions);
 
         int[] emptyPositions = IntStream.range(0, 100).filter( pos->
             !ArrayUtils.contains(foodPositions, pos)
@@ -268,19 +268,19 @@ public class WorldStateTest {
     @Test
     public void testListEmptyValidPositions() throws Exception {
         int[] foodPositions = new int[] { 2, 6, 90 };
-        WorldState ws = SnakeTestUtil.createWorld(Bomb.class, 10, 10, foodPositions);
+        WorldState ws = PaintbotTestUtil.createWorld(Bomb.class, 10, 10, foodPositions);
 
         CharacterImpl h1 = new CharacterImpl("h1", "p1", 16);
         CharacterImpl h2 = new CharacterImpl("h2", "p2", 84);
 
-        ws = SnakeTestUtil.replaceWorldObjectAt(ws, h1, 16);
-        ws = SnakeTestUtil.replaceWorldObjectAt(ws, h2, 84);
+        ws = PaintbotTestUtil.replaceWorldObjectAt(ws, h1, 16);
+        ws = PaintbotTestUtil.replaceWorldObjectAt(ws, h2, 84);
 
-        int[] adjacentAndSnakeHead = new int[] {16, 84, 6,26,15,17,74,94,83,85};
+        int[] adjacentAndPaintbotHead = new int[] {16, 84, 6,26,15,17,74,94,83,85};
 
         int[] validPositions = IntStream.range(0, 100).filter( pos->
                 (!ArrayUtils.contains(foodPositions, pos) &&
-                !ArrayUtils.contains(adjacentAndSnakeHead, pos))
+                !ArrayUtils.contains(adjacentAndPaintbotHead, pos))
         ).toArray();
 
         assertArrayEquals(validPositions, ws.listEmptyValidPositions());
@@ -290,7 +290,7 @@ public class WorldStateTest {
     public void testListFoodPositions() throws Exception {
 
         int[] foodPositions = new int[] { 2, 6, 85 };
-        WorldState ws = SnakeTestUtil.createWorld(Bomb.class, 10, 10, foodPositions);
+        WorldState ws = PaintbotTestUtil.createWorld(Bomb.class, 10, 10, foodPositions);
 
         assertArrayEquals(foodPositions, ws.listBombPositions());
     }
@@ -299,20 +299,20 @@ public class WorldStateTest {
     public void testListObstaclePositions() throws Exception {
 
         int[] obstaclePositions = new int[] { 8, 13, 23, 55, 87, 99 };
-        WorldState ws = SnakeTestUtil.createWorld(Obstacle.class, 10, 10, obstaclePositions);
+        WorldState ws = PaintbotTestUtil.createWorld(Obstacle.class, 10, 10, obstaclePositions);
 
         assertArrayEquals(obstaclePositions, ws.listObstaclePositions());
     }
 
     @Test
-    public void testListPositionsAdjacentToSnakeHeads() throws Exception {
+    public void testListPositionsAdjacentToPaintbotHeads() throws Exception {
         WorldState ws = new WorldState(15, 15);
 
         CharacterImpl h1 = new CharacterImpl("h1", "p1", 16);
         CharacterImpl h2 = new CharacterImpl("h2", "p2", 84);
 
-        ws = SnakeTestUtil.replaceWorldObjectAt(ws, h1, 16);
-        ws = SnakeTestUtil.replaceWorldObjectAt(ws, h2, 84);
+        ws = PaintbotTestUtil.replaceWorldObjectAt(ws, h1, 16);
+        ws = PaintbotTestUtil.replaceWorldObjectAt(ws, h2, 84);
 
         int[] illegalPos = ws.listPositionsAdjacentToCharacters();
 
@@ -323,14 +323,14 @@ public class WorldStateTest {
     }
 
     @Test
-    public void testListPositionsAdjacentToSnakeHeadsNearEdge() throws Exception {
+    public void testListPositionsAdjacentToPaintbotHeadsNearEdge() throws Exception {
         WorldState ws = new WorldState(15, 15);
 
         CharacterImpl h1 = new CharacterImpl("h1", "p1", 45);
         CharacterImpl h2 = new CharacterImpl("h2", "p2", 84);
 
-        ws = SnakeTestUtil.replaceWorldObjectAt(ws, h1, 45);
-        ws = SnakeTestUtil.replaceWorldObjectAt(ws, h2, 84);
+        ws = PaintbotTestUtil.replaceWorldObjectAt(ws, h1, 45);
+        ws = PaintbotTestUtil.replaceWorldObjectAt(ws, h2, 84);
 
         int[] illegalPos = ws.listPositionsAdjacentToCharacters();
 

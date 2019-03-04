@@ -15,11 +15,11 @@ public class DecrementStunTest {
 
     @Test
     public void testTransform() {
-        CharacterImpl snakeA = new CharacterImpl("a", "a", 2);
-        snakeA.setIsStunnedForTicks(3);
+        CharacterImpl paintbotA = new CharacterImpl("a", "a", 2);
+        paintbotA.setIsStunnedForTicks(3);
 
         Tile[] tiles = new WorldState(3, 3).getTiles();
-        tiles[2] = new Tile(snakeA);
+        tiles[2] = new Tile(paintbotA);
         WorldState worldState = new WorldState(3, 3, tiles);
 
         DecrementStun decrementStun = new DecrementStun();
@@ -31,10 +31,10 @@ public class DecrementStunTest {
 
     @Test
     public void testTransformWithZeroCount() {
-        CharacterImpl snakeA = new CharacterImpl("a", "a", 2);
+        CharacterImpl paintbotA = new CharacterImpl("a", "a", 2);
 
         Tile[] tiles = new WorldState(3, 3).getTiles();
-        tiles[2] = new Tile(snakeA);
+        tiles[2] = new Tile(paintbotA);
         WorldState worldState = new WorldState(3, 3, tiles);
 
         DecrementStun decrementStun = new DecrementStun();

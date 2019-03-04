@@ -169,19 +169,19 @@
         "tail": false,
         "id": 94833189,
         "order": 1,
-        "content": "snakebody"
+        "content": "paintbotbody"
       },
       {
         "tail": false,
         "id": 94833189,
         "order": 2,
-        "content": "snakebody"
+        "content": "paintbotbody"
       },
       {
         "tail": true,
         "id": 94833189,
         "order": 3,
-        "content": "snakebody"
+        "content": "paintbotbody"
       },
       {
         "content": "empty"
@@ -224,7 +224,7 @@
       {
         "name": "cobra",
         "id": 94833189,
-        "content": "snakehead"
+        "content": "paintbothead"
       },
       {
         "content": "obstacle"
@@ -509,7 +509,7 @@
         "tail": true,
         "id": -973197092,
         "order": 2,
-        "content": "snakebody"
+        "content": "paintbotbody"
       },
       {
         "content": "empty"
@@ -555,13 +555,13 @@
       {
         "name": "python",
         "id": -973197092,
-        "content": "snakehead"
+        "content": "paintbothead"
       },
       {
         "tail": false,
         "id": -973197092,
         "order": 1,
-        "content": "snakebody"
+        "content": "paintbotbody"
       },
       {
         "content": "empty"
@@ -727,7 +727,7 @@
       }
     ]
   ],
-  "snakeInfos": [
+  "paintbotInfos": [
     {
       "name": "python",
       "length": 3,
@@ -746,5 +746,5 @@
   "playerId": null,
   "messageId": null,
   "correlationId": null,
-  "type": "se.cygni.snake.api.model.Map"
+  "type": "se.cygni.paintbot.api.model.Map"
 }

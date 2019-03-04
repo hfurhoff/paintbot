@@ -47,7 +47,7 @@ public class PerformCharacterAction implements WorldTransformation {
         
 
         // Target tile is not empty, check what's in it (rember that this
-        // move is in a World where only this Snake exists).
+        // move is in a World where only this Paintbot exists).
         if (!currentWorld.isTileEmpty(targetCharacterPosition)) {
 
             Tile targetTile = currentWorld.getTile(targetCharacterPosition);
