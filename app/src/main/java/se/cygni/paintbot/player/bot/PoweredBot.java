@@ -72,7 +72,7 @@ public class PoweredBot extends BotPlayer {
         int closestPowerUpDistance = Integer.MAX_VALUE;
         MapCoordinate myPosition = mapUtil.getMyPosition();
 
-        for(MapCoordinate mc : mapUtil.listCoordinatesContainingBombs()) {
+        for (MapCoordinate mc : mapUtil.listCoordinatesContainingPowerUps()) {
             if(closestPowerUp == null) {
                 closestPowerUp = mc;
                 closestPowerUpDistance = closestPowerUp.getManhattanDistanceTo(myPosition);

@@ -4,10 +4,16 @@ import org.junit.Ignore;
 import org.junit.Test;
 import se.cygni.game.WorldState;
 import se.cygni.game.testutil.PaintbotTestUtil;
-import se.cygni.game.worldobject.*;
+import se.cygni.game.worldobject.Empty;
+import se.cygni.game.worldobject.Obstacle;
+import se.cygni.game.worldobject.PowerUp;
+import se.cygni.game.worldobject.WorldObject;
 import se.cygni.paintbot.api.GameMessageParser;
 import se.cygni.paintbot.api.event.MapUpdateEvent;
-import se.cygni.paintbot.api.model.*;
+import se.cygni.paintbot.api.model.Map;
+import se.cygni.paintbot.api.model.MapEmpty;
+import se.cygni.paintbot.api.model.MapObstacle;
+import se.cygni.paintbot.api.model.MapPowerUp;
 
 import java.util.HashSet;
 
@@ -23,7 +29,7 @@ public class WorldStateConverterTest {
 
     @Test
     public void testConvertWorldStateWithFood() throws Exception {
-        testConversionWithType(Bomb.class);
+        testConversionWithType(PowerUp.class);
     }
 
     @Test @Ignore
@@ -67,7 +73,7 @@ public class WorldStateConverterTest {
         if (clazz == Obstacle.class) {
             assertArrayEquals(new int[] {4}, reparsedMap.getObstaclePositions());
         } else {
-            assertArrayEquals(new int[] {4}, reparsedMap.getBombPositions());
+            assertArrayEquals(new int[]{4}, reparsedMap.getPowerUpPositions());
 
         }
 
@@ -79,8 +85,8 @@ public class WorldStateConverterTest {
         if (obj instanceof Obstacle)
             return MapObstacle.class;
 
-        if (obj instanceof Bomb)
-            return MapBomb.class;
+        if (obj instanceof PowerUp)
+            return MapPowerUp.class;
 
         if (obj instanceof Empty)
             return MapEmpty.class;

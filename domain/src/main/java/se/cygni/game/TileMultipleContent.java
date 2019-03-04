@@ -1,8 +1,10 @@
 package se.cygni.game;
 
-import se.cygni.game.worldobject.*;
 import se.cygni.game.worldobject.Character;
 import se.cygni.game.worldobject.CharacterImpl;
+import se.cygni.game.worldobject.Empty;
+import se.cygni.game.worldobject.PowerUp;
+import se.cygni.game.worldobject.WorldObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,7 @@ public class TileMultipleContent {
         }
 
         if (contents.size() == 2 &&
-                containsType(Bomb.class) && containsType(CharacterImpl.class)) {
+                containsType(PowerUp.class) && containsType(CharacterImpl.class)) {
             return getFirstContentOfType(CharacterImpl.class);
         }
 
@@ -85,7 +87,7 @@ public class TileMultipleContent {
         }
 
         if (contents.size() == 2 &&
-                containsType(Bomb.class) && containsType(CharacterImpl.class)) {
+                containsType(PowerUp.class) && containsType(CharacterImpl.class)) {
             return true;
         }
 

@@ -11,11 +11,11 @@ import se.cygni.game.enums.Action;
 import se.cygni.game.exception.OutOfBoundsException;
 import se.cygni.game.exception.TransformationException;
 import se.cygni.game.random.XORShiftRandom;
-import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Character;
 import se.cygni.game.worldobject.CharacterImpl;
 import se.cygni.game.worldobject.Empty;
 import se.cygni.game.worldobject.Obstacle;
+import se.cygni.game.worldobject.PowerUp;
 import se.cygni.game.worldobject.WorldObject;
 import se.cygni.paintbot.api.event.CharacterStunnedEvent;
 import se.cygni.paintbot.api.model.PointReason;
@@ -115,8 +115,8 @@ public class WorldUpdater {
         for (int position = 0; position < tiles.length; position++) {
             if (updatedPositions.containsKey(position)) {
                 String playerId = updatedPositions.get(position).get(0);
-                var hasPickedUpBomb = ws.getTile(position).getContent() instanceof Bomb;
-                updateCharacterState(tiles, position, nextWorld.getCharacterById(playerId), hasPickedUpBomb);
+                var hasPickedUpPowerUp = ws.getTile(position).getContent() instanceof PowerUp;
+                updateCharacterState(tiles, position, nextWorld.getCharacterById(playerId), hasPickedUpPowerUp);
             } else if (originalPositions.containsValue(position)) {
                 tiles[position] = new Tile(new Empty(), ws.getTile(position).getOwnerID());
             }
@@ -124,17 +124,17 @@ public class WorldUpdater {
 
         WorldState positionUpdatedWorld = new WorldState(ws.getWidth(), ws.getHeight(), tiles);
 
-        Map<Integer, List<String>> positionsBombed = new HashMap<>();
+        Map<Integer, List<String>> positionsExploded = new HashMap<>();
         actions.entrySet().stream()
                 .filter(e ->
                         e.getValue().equals(Action.EXPLODE) &&
-                                ws.getCharacterById(e.getKey()).isCarryingBomb() &&
+                                ws.getCharacterById(e.getKey()).isCarryingPowerUp() &&
                                 canPerform(ws, e.getKey())
                 )
                 .forEach(e -> {
                     String playerId = e.getKey();
                     var player = positionUpdatedWorld.getCharacterById(playerId);
-                    player.setCarryingBomb(false);
+                    player.setCarryingPowerUp(false);
                     int position = player.getPosition();
                     Coordinate myCoordinate = positionUpdatedWorld.translatePosition(position);
 
@@ -154,22 +154,23 @@ public class WorldUpdater {
                                 int currPos = positionUpdatedWorld.translateCoordinate(coordinate);
                                 positionUpdatedWorld.getTile(currPos);
 
-                                List<String> playersBombingPosition = positionsBombed.getOrDefault(currPos, new LinkedList<>());
-                                playersBombingPosition.add(playerId);
-                                positionsBombed.put(currPos, playersBombingPosition);
+                                List<String> playersExplodingPosition = positionsExploded
+                                        .getOrDefault(currPos, new LinkedList<>());
+                                playersExplodingPosition.add(playerId);
+                                positionsExploded.put(currPos, playersExplodingPosition);
                             }
                         }
 
                     }
                 });
 
-        nextWorld.setBombings(positionsBombed);
+        nextWorld.setExplosions(positionsExploded);
 
-        positionsBombed.forEach((position, players) -> {
+        positionsExploded.forEach((position, players) -> {
             WorldObject content = positionUpdatedWorld.getTile(position).getContent();
-            // Randomly select one player to successfully bomb
+            // Randomly select one player to successfully explode on this tile
             String playerId = players.get(random.nextInt(players.size()));
-            if (content instanceof Empty || content instanceof Bomb) {
+            if (content instanceof Empty || content instanceof PowerUp) {
                 tiles[position] = new Tile(content, playerId);
             } else if (content instanceof Character) {
                 stunnedPlayers.add(positionUpdatedWorld.getCharacterAtPosition(position).getPlayerId());
@@ -185,7 +186,8 @@ public class WorldUpdater {
             positionUpdatedWorld.getCharacterById(p.getPlayerId()).setPoints(p.getTotalPoints());
         });
 
-        return new WorldState(ws.getWidth(), ws.getHeight(), tiles, nextWorld.getCollisions(), nextWorld.getBombings());
+        return new WorldState(ws.getWidth(), ws.getHeight(), tiles, nextWorld.getCollisions(), nextWorld
+                .getExplosions());
     }
 
     private void updatePosition(ConcurrentHashMap<Integer, List<String>> updatedPositions, String player, Integer newPosition) {
@@ -218,10 +220,10 @@ public class WorldUpdater {
     }
 
 
-    private void updateCharacterState(Tile[] tiles, int targetPosition, Character character, boolean hasPickedUpBomb) {
+    private void updateCharacterState(Tile[] tiles, int targetPosition, Character character, boolean hasPickedUpPowerUp) {
         character.setPosition(targetPosition);
-        if (hasPickedUpBomb) {
-            character.setCarryingBomb(true);
+        if (hasPickedUpPowerUp) {
+            character.setCarryingPowerUp(true);
         }
         tiles[targetPosition] = new Tile(character, character.getPlayerId());
     }

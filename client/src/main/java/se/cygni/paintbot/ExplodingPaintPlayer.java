@@ -77,7 +77,8 @@ public class ExplodingPaintPlayer extends BasePaintbotClient {
 
         Arrays.stream(mapUpdateEvent.getMap().getCharacterInfos())
                 .filter(ci -> ci.getName().equals(name))
-                .findFirst().ifPresent(ci -> log.info("Is carrying bomb {} at tick: {}", ci.isCarryingBomb(), mapUpdateEvent.getGameTick()));
+                .findFirst().ifPresent(ci -> log
+                .info("Is carrying power up {} at tick: {}", ci.isCarryingPowerUp(), mapUpdateEvent.getGameTick()));
 
         if(mapUpdateEvent.getGameTick() % 10 == 0) {
             registerMove(mapUpdateEvent.getGameTick(), CharacterAction.EXPLODE);
@@ -88,7 +89,7 @@ public class ExplodingPaintPlayer extends BasePaintbotClient {
         int closestPowerUpDistance = Integer.MAX_VALUE;
         MapCoordinate myPosition = mapUtil.getMyPosition();
 
-        for(MapCoordinate mc : mapUtil.listCoordinatesContainingBombs()) {
+        for (MapCoordinate mc : mapUtil.listCoordinatesContainingPowerUps()) {
             if(closestPowerUp == null) {
                 closestPowerUp = mc;
                 closestPowerUpDistance = closestPowerUp.getManhattanDistanceTo(myPosition);

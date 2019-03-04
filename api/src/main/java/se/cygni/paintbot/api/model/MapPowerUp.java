@@ -2,9 +2,9 @@ package se.cygni.paintbot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class MapBomb implements TileContent {
+public class MapPowerUp implements TileContent {
 
-    public static final String CONTENT = "bomb";
+    public static final String CONTENT = "powerUp";
 
     @Override
     public String getContent() {
@@ -13,6 +13,6 @@ public class MapBomb implements TileContent {
 
     @JsonIgnore
     public String toDisplay() {
-        return "B";
+        return "P";
     }
 }

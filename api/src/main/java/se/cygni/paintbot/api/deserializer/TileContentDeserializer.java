@@ -7,7 +7,12 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.IntNode;
-import se.cygni.paintbot.api.model.*;
+import se.cygni.paintbot.api.model.MapCharacter;
+import se.cygni.paintbot.api.model.MapEmpty;
+import se.cygni.paintbot.api.model.MapObstacle;
+import se.cygni.paintbot.api.model.MapPaintbotBody;
+import se.cygni.paintbot.api.model.MapPowerUp;
+import se.cygni.paintbot.api.model.TileContent;
 
 import java.io.IOException;
 
@@ -38,7 +43,8 @@ public class TileContentDeserializer extends JsonDeserializer<TileContent> {
 
         switch (content) {
             case MapObstacle.CONTENT  : return new MapObstacle();
-            case MapBomb.CONTENT      : return new MapBomb();
+            case MapPowerUp.CONTENT:
+                return new MapPowerUp();
             case MapCharacter.CONTENT : return new MapCharacter(name, playerId);
             case MapPaintbotBody.CONTENT : return new MapPaintbotBody(tail, playerId, order);
             default: return new MapEmpty();

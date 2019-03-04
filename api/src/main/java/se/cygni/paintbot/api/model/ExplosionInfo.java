@@ -3,23 +3,23 @@ package se.cygni.paintbot.api.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class BombingInfo {
+public class ExplosionInfo {
     final int position;
-    final String[] bombers;
+    final String[] exploders;
 
     @JsonCreator
-    public BombingInfo(
+    public ExplosionInfo(
             @JsonProperty("position") int position,
-            @JsonProperty("bombers") String[] bombers) {
+            @JsonProperty("exploders") String[] exploders) {
         this.position = position;
-        this.bombers = bombers;
+        this.exploders = exploders;
     }
 
     public int getPosition() {
         return position;
     }
 
-    public String[] getBombers() {
-        return bombers;
+    public String[] getExploders() {
+        return exploders;
     }
 }

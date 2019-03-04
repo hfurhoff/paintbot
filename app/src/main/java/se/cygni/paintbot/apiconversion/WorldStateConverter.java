@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.cygni.game.WorldState;
 import se.cygni.game.worldobject.CharacterImpl;
-import se.cygni.paintbot.api.model.BombingInfo;
 import se.cygni.paintbot.api.model.CharacterInfo;
 import se.cygni.paintbot.api.model.ColissionInfo;
+import se.cygni.paintbot.api.model.ExplosionInfo;
 import se.cygni.paintbot.api.model.Map;
 import se.cygni.paintbot.player.IPlayer;
 
@@ -23,15 +23,15 @@ public class WorldStateConverter {
         int height = ws.getHeight();
 
         CharacterInfo[] characterInfos = getCharacterInfos(ws, players);
-        int[] foods = ws.listBombPositions();
+        int[] foods = ws.listPowerUpPositions();
         int[] obstacles = ws.listObstaclePositions();
         ColissionInfo[] colissionInfos = ws.getCollisions().entrySet().stream()
                 .map(e -> new ColissionInfo(e.getKey(), e.getValue().toArray(String[]::new)))
                 .toArray(ColissionInfo[]::new);
 
-        BombingInfo[] bombingInfos = ws.getBombings().entrySet().stream()
-                .map(e -> new BombingInfo(e.getKey(), e.getValue().toArray(String[]::new)))
-                .toArray(BombingInfo[]::new);
+        ExplosionInfo[] explosionInfos = ws.getExplosions().entrySet().stream()
+                .map(e -> new ExplosionInfo(e.getKey(), e.getValue().toArray(String[]::new)))
+                .toArray(ExplosionInfo[]::new);
 
 
         return new Map(
@@ -42,7 +42,7 @@ public class WorldStateConverter {
                 foods,
                 obstacles,
                 colissionInfos,
-                bombingInfos);
+                explosionInfos);
     }
 
     private static CharacterInfo[] getCharacterInfos(WorldState ws, Set<IPlayer> players) {
@@ -79,7 +79,8 @@ public class WorldStateConverter {
         int position = ws.getCharacterPosition(character);
         int[] colouredPositions = ws.listPositionWithOwner(character.getPlayerId());
 
-        return new CharacterInfo(name, character.getPoints(), id, position, character.isCarryingBomb(), colouredPositions, character
+        return new CharacterInfo(name, character.getPoints(), id, position, character
+                .isCarryingPowerUp(), colouredPositions, character
                 .getIsStunnedForTicks());
     }
 

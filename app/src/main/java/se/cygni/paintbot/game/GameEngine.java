@@ -6,9 +6,13 @@ import org.slf4j.LoggerFactory;
 import se.cygni.game.WorldState;
 import se.cygni.game.enums.Action;
 import se.cygni.game.random.XORShiftRandom;
-import se.cygni.game.transformation.*;
-import se.cygni.game.worldobject.Bomb;
+import se.cygni.game.transformation.AddRandomObstacle;
+import se.cygni.game.transformation.AddWorldObjectAtRandomPosition;
+import se.cygni.game.transformation.AddWorldObjectsInCircle;
+import se.cygni.game.transformation.DecrementStun;
+import se.cygni.game.transformation.RemoveRandomWorldObject;
 import se.cygni.game.worldobject.CharacterImpl;
+import se.cygni.game.worldobject.PowerUp;
 import se.cygni.paintbot.api.GameMessage;
 import se.cygni.paintbot.api.event.GameEndedEvent;
 import se.cygni.paintbot.api.event.GameResultEvent;
@@ -19,7 +23,11 @@ import se.cygni.paintbot.apiconversion.GameSettingsConverter;
 import se.cygni.paintbot.event.InternalGameEvent;
 import se.cygni.paintbot.player.IPlayer;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -90,10 +98,10 @@ public class GameEngine {
         world = charactersInCircleFormation.transform(world);
     }
 
-    private void initPlaceBombs() {
-        if (gameFeatures.isBombsEnabled()) {
-            IntStream.range(0, gameFeatures.getStartBombs()).forEach(n -> {
-                AddWorldObjectAtRandomPosition addFoodTransform = new AddWorldObjectAtRandomPosition(new Bomb());
+    private void initPlacePowerUps() {
+        if (gameFeatures.isPowerUpsEnabled()) {
+            IntStream.range(0, gameFeatures.getStartPowerUps()).forEach(n -> {
+                AddWorldObjectAtRandomPosition addFoodTransform = new AddWorldObjectAtRandomPosition(new PowerUp());
                 world = addFoodTransform.transform(world);
             });
         }
@@ -139,7 +147,7 @@ public class GameEngine {
                 GameSettingsConverter.toGameSettings(gameFeatures)));
 
         initPlaceObstacles();
-        initPlaceBombs();
+        initPlacePowerUps();
     }
 
 
@@ -187,8 +195,8 @@ public class GameEngine {
                 currentWorldTick++;
 
                 // Add random objects
-                if (gameFeatures.isBombsEnabled()) {
-                    randomBomb();
+                if (gameFeatures.isPowerUpsEnabled()) {
+                    randomPowerUp();
                 }
             }
 
@@ -226,16 +234,16 @@ public class GameEngine {
         t.start();
     }
 
-    private void randomBomb() {
-        if (shouldExecute(gameFeatures.getRemoveBombLikelihood())) {
-            RemoveRandomWorldObject<Bomb> removeTransform =
-                    new RemoveRandomWorldObject<>(Bomb.class);
+    private void randomPowerUp() {
+        if (shouldExecute(gameFeatures.getRemovePowerUpLikelihood())) {
+            RemoveRandomWorldObject<PowerUp> removeTransform =
+                    new RemoveRandomWorldObject<>(PowerUp.class);
             world = removeTransform.transform(world);
         }
 
-        if (shouldExecute(gameFeatures.getAddBombLikelihood())) {
+        if (shouldExecute(gameFeatures.getAddPowerUpLikelihood())) {
             AddWorldObjectAtRandomPosition addTransform =
-                    new AddWorldObjectAtRandomPosition(new Bomb());
+                    new AddWorldObjectAtRandomPosition(new PowerUp());
             world = addTransform.transform(world);
         }
     }

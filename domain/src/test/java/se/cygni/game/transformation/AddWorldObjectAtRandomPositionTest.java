@@ -4,9 +4,9 @@ import org.junit.Test;
 import se.cygni.game.Tile;
 import se.cygni.game.WorldState;
 import se.cygni.game.testutil.PaintbotTestUtil;
-import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Empty;
 import se.cygni.game.worldobject.Obstacle;
+import se.cygni.game.worldobject.PowerUp;
 
 import java.util.stream.IntStream;
 
@@ -18,8 +18,8 @@ public class AddWorldObjectAtRandomPositionTest {
     public void testAddRandomWorldObjectTransform() throws Exception {
         WorldState world = new WorldState(3,3);
 
-        Bomb bomb = new Bomb();
-        AddWorldObjectAtRandomPosition randomFood = new AddWorldObjectAtRandomPosition(bomb);
+        PowerUp powerUp = new PowerUp();
+        AddWorldObjectAtRandomPosition randomFood = new AddWorldObjectAtRandomPosition(powerUp);
         WorldState transformedWorld = randomFood.transform(world);
 
         int noofTilesNotEmpty = 0;
@@ -29,9 +29,9 @@ public class AddWorldObjectAtRandomPositionTest {
             if (!(tile.getContent() instanceof Empty)) {
                 noofTilesNotEmpty++;
             }
-            if (tile.getContent() instanceof Bomb) {
+            if (tile.getContent() instanceof PowerUp) {
                 noofTilesFood++;
-                assertEquals(bomb, tile.getContent());
+                assertEquals(powerUp, tile.getContent());
             }
         }
 
@@ -47,8 +47,8 @@ public class AddWorldObjectAtRandomPositionTest {
         AddWorldObjectAtRandomPosition randomObstacle = new AddWorldObjectAtRandomPosition(obstacle);
         WorldState transformedWorld = randomObstacle.transform(world);
 
-        Bomb bomb = new Bomb();
-        AddWorldObjectAtRandomPosition randomFood = new AddWorldObjectAtRandomPosition(bomb);
+        PowerUp powerUp = new PowerUp();
+        AddWorldObjectAtRandomPosition randomFood = new AddWorldObjectAtRandomPosition(powerUp);
         transformedWorld = randomFood.transform(transformedWorld);
 
         int noofTilesNotEmpty = 0;
@@ -59,9 +59,9 @@ public class AddWorldObjectAtRandomPositionTest {
             if (!(tile.getContent() instanceof Empty)) {
                 noofTilesNotEmpty++;
             }
-            if (tile.getContent() instanceof Bomb) {
+            if (tile.getContent() instanceof PowerUp) {
                 noofTilesFood++;
-                assertEquals(bomb, tile.getContent());
+                assertEquals(powerUp, tile.getContent());
             }
             if (tile.getContent() instanceof Obstacle) {
                 noofTilesObstacle++;
@@ -80,8 +80,8 @@ public class AddWorldObjectAtRandomPositionTest {
         // Create world full of Obstacles
         WorldState ws = PaintbotTestUtil.createWorld(Obstacle.class, 10, 10, IntStream.range(0,100).toArray());
 
-        Bomb bomb = new Bomb();
-        AddWorldObjectAtRandomPosition randomFood = new AddWorldObjectAtRandomPosition(bomb);
+        PowerUp powerUp = new PowerUp();
+        AddWorldObjectAtRandomPosition randomFood = new AddWorldObjectAtRandomPosition(powerUp);
 
         ws = randomFood.transform(ws);
 
@@ -95,12 +95,12 @@ public class AddWorldObjectAtRandomPositionTest {
         WorldState ws = PaintbotTestUtil.createWorld(Obstacle.class, 10, 10, IntStream.range(0,100).toArray());
         ws = PaintbotTestUtil.replaceWorldObjectAt(ws, new Empty(), 50);
 
-        Bomb bomb = new Bomb();
-        AddWorldObjectAtRandomPosition randomFood = new AddWorldObjectAtRandomPosition(bomb);
+        PowerUp powerUp = new PowerUp();
+        AddWorldObjectAtRandomPosition randomFood = new AddWorldObjectAtRandomPosition(powerUp);
 
         ws = randomFood.transform(ws);
 
         assertEquals(99, ws.listObstaclePositions().length);
-        assertEquals(1, ws.listBombPositions().length);
+        assertEquals(1, ws.listPowerUpPositions().length);
     }
 }

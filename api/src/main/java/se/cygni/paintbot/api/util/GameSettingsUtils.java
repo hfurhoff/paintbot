@@ -7,7 +7,7 @@ public class GameSettingsUtils {
     public static GameSettings trainingWorld() {
         GameSettings settings = new GameSettings();
         settings.setMaxNoofPlayers(5);
-        settings.setBombsEnabled(true);
+        settings.setPowerUpsEnabled(true);
         settings.setObstaclesEnabled(true);
         return settings;
     }

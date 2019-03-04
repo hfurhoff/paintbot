@@ -10,14 +10,11 @@ public class Map {
 
     final CharacterInfo[] characterInfos;
 
-    // List of position containing Food
-    final int[] bombPositions;
-
-    // List of position containing Obstacle
+    final int[] powerUpPositions;
     final int[] obstaclePositions;
 
-    final ColissionInfo[] colissionInfos;
-    final BombingInfo[] bombingInfos;
+    final ColissionInfo[] collisionInfos;
+    final ExplosionInfo[] explosionInfos;
 
     @JsonCreator
     public Map(
@@ -25,19 +22,19 @@ public class Map {
             @JsonProperty("height") int height,
             @JsonProperty("worldTick") long worldTick,
             @JsonProperty("characterInfos") CharacterInfo[] characterInfos,
-            @JsonProperty("bombPositions") int[] bombPositions,
+            @JsonProperty("powerUpPositions") int[] powerUpPositions,
             @JsonProperty("obstaclePositions") int[] obstaclePositions,
-            @JsonProperty("colissionInfos") ColissionInfo[] colissionInfos,
-            @JsonProperty("bombingInfos") BombingInfo[] bombingInfos
+            @JsonProperty("collisionInfos") ColissionInfo[] collisionInfos,
+            @JsonProperty("explosionInfos") ExplosionInfo[] explosionInfos
     ) {
         this.width = width;
         this.height = height;
         this.worldTick = worldTick;
         this.characterInfos = characterInfos;
-        this.bombPositions = bombPositions;
+        this.powerUpPositions = powerUpPositions;
         this.obstaclePositions = obstaclePositions;
-        this.colissionInfos = colissionInfos;
-        this.bombingInfos = bombingInfos;
+        this.collisionInfos = collisionInfos;
+        this.explosionInfos = explosionInfos;
     }
 
     public int getWidth() {
@@ -56,19 +53,19 @@ public class Map {
         return worldTick;
     }
 
-    public int[] getBombPositions() {
-        return bombPositions;
+    public int[] getPowerUpPositions() {
+        return powerUpPositions;
     }
 
     public int[] getObstaclePositions() {
         return obstaclePositions;
     }
 
-    public ColissionInfo[] getColissionInfos() {
-        return colissionInfos;
+    public ColissionInfo[] getCollisionInfos() {
+        return collisionInfos;
     }
 
-    public BombingInfo[] getBombingInfos() {
-        return bombingInfos;
+    public ExplosionInfo[] getExplosionInfos() {
+        return explosionInfos;
     }
 }

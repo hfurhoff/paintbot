@@ -1,6 +1,13 @@
 package se.cygni.paintbot.client;
 
-import se.cygni.paintbot.api.model.*;
+import se.cygni.paintbot.api.model.CharacterAction;
+import se.cygni.paintbot.api.model.CharacterInfo;
+import se.cygni.paintbot.api.model.Map;
+import se.cygni.paintbot.api.model.MapCharacter;
+import se.cygni.paintbot.api.model.MapEmpty;
+import se.cygni.paintbot.api.model.MapObstacle;
+import se.cygni.paintbot.api.model.MapPowerUp;
+import se.cygni.paintbot.api.model.TileContent;
 
 import java.util.Arrays;
 import java.util.BitSet;
@@ -13,7 +20,7 @@ public class MapUtil {
     private final String playerId;
     private final java.util.Map<String, CharacterInfo> characterInfoMap;
     private final java.util.Map<String, BitSet> paintbotSpread;
-    private final BitSet bombs;
+    private final BitSet powerUps;
     private final BitSet obstacles;
     private final BitSet characters;
 
@@ -27,7 +34,7 @@ public class MapUtil {
         paintbotSpread = new HashMap<>();
 
         int mapLength = map.getHeight() * map.getWidth();
-        bombs = new BitSet(mapLength);
+        powerUps = new BitSet(mapLength);
         obstacles = new BitSet(mapLength);
         characters = new BitSet(mapLength);
 
@@ -60,8 +67,8 @@ public class MapUtil {
     /**
      * @return An array containing all MapCoordinates where there's Food
      */
-    public MapCoordinate[] listCoordinatesContainingBombs() {
-        return translatePositions(map.getBombPositions());
+    public MapCoordinate[] listCoordinatesContainingPowerUps() {
+        return translatePositions(map.getPowerUpPositions());
     }
 
     /**
@@ -128,8 +135,8 @@ public class MapUtil {
             throw new RuntimeException(errorMessage);
         }
 
-        if (bombs.get(position)) {
-            return new MapBomb();
+        if (powerUps.get(position)) {
+            return new MapPowerUp();
         }
 
         if (obstacles.get(position)) {
@@ -218,8 +225,8 @@ public class MapUtil {
     }
 
     private void populateStaticTileBits() {
-        for (int pos : map.getBombPositions()) {
-            bombs.set(pos);
+        for (int pos : map.getPowerUpPositions()) {
+            powerUps.set(pos);
         }
         for (int pos : map.getObstaclePositions()) {
             obstacles.set(pos);

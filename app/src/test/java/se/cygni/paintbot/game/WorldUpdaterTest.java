@@ -379,7 +379,7 @@ public class WorldUpdaterTest {
         int obstaclePos = ws.translateCoordinate(obstacleCoord);
         Tile[] tiles = ws.getTiles();
         CharacterImpl character = new CharacterImpl("A", "A", bot1Pos);
-        character.setCarryingBomb(true);
+        character.setCarryingPowerUp(true);
         tiles[bot1Pos] = new Tile(character, "A");
         tiles[obstaclePos] = new Tile(new Obstacle());
 
@@ -398,7 +398,7 @@ public class WorldUpdaterTest {
         );
 
         assertBotAtPos("A", bot1Coord, 0, nextState);
-        assertThat(nextState.getCharacterById("A").isCarryingBomb()).isFalse();
+        assertThat(nextState.getCharacterById("A").isCarryingPowerUp()).isFalse();
 
         Tile[] nextStateTiles = nextState.getTiles();
         assertThat(nextStateTiles[obstaclePos].getContent()).isInstanceOf(Obstacle.class);
@@ -438,16 +438,16 @@ public class WorldUpdaterTest {
         Tile[] tiles = ws.getTiles();
 
         CharacterImpl character1 = new CharacterImpl("A", "A", bot1Pos);
-        character1.setCarryingBomb(true);
+        character1.setCarryingPowerUp(true);
         tiles[bot1Pos] = new Tile(character1, "A");
 
         CharacterImpl character2 = new CharacterImpl("B", "B", bot2Pos);
-        character2.setCarryingBomb(true);
+        character2.setCarryingPowerUp(true);
         tiles[bot2Pos] = new Tile(character2, "B");
 
 
         CharacterImpl character3 = new CharacterImpl("C", "C", bot3Pos);
-        character3.setCarryingBomb(true);
+        character3.setCarryingPowerUp(true);
         tiles[bot3Pos] = new Tile(character3, "C");
 
         tiles[obstaclePos] = new Tile(new Obstacle());
@@ -469,13 +469,13 @@ public class WorldUpdaterTest {
         );
 
         assertBotAtPos("A", bot1Coord, gameFeatures.getNoOfTicksStunned(), nextState);
-        assertThat(nextState.getCharacterById("A").isCarryingBomb()).isFalse();
+        assertThat(nextState.getCharacterById("A").isCarryingPowerUp()).isFalse();
 
         assertBotAtPos("B", bot2Coord, gameFeatures.getNoOfTicksStunned(), nextState);
-        assertThat(nextState.getCharacterById("B").isCarryingBomb()).isFalse();
+        assertThat(nextState.getCharacterById("B").isCarryingPowerUp()).isFalse();
 
         assertBotAtPos("C", bot3Coord, gameFeatures.getNoOfTicksStunned(), nextState);
-        assertThat(nextState.getCharacterById("C").isCarryingBomb()).isFalse();
+        assertThat(nextState.getCharacterById("C").isCarryingPowerUp()).isFalse();
 
         Tile[] nextStateTiles = nextState.getTiles();
         assertThat(nextStateTiles[obstaclePos].getContent()).isInstanceOf(Obstacle.class);

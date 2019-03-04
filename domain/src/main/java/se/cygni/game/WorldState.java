@@ -3,11 +3,11 @@ package se.cygni.game;
 import org.apache.commons.lang3.ArrayUtils;
 import se.cygni.game.enums.Action;
 import se.cygni.game.exception.OutOfBoundsException;
-import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Character;
 import se.cygni.game.worldobject.CharacterImpl;
 import se.cygni.game.worldobject.Empty;
 import se.cygni.game.worldobject.Obstacle;
+import se.cygni.game.worldobject.PowerUp;
 import se.cygni.game.worldobject.WorldObject;
 
 import java.util.Arrays;
@@ -23,7 +23,7 @@ public class WorldState {
     private final int width, height;
     private final Tile[] tiles;
     private Map<Integer, List<String>> collisions = new HashMap<>();
-    private Map<Integer, List<String>> bombings = new HashMap<>();
+    private Map<Integer, List<String>> explosions = new HashMap<>();
 
     public WorldState(int width, int height) {
         this.width = width;
@@ -44,12 +44,12 @@ public class WorldState {
     }
 
 
-    public WorldState(int width, int height, Tile[] tiles, Map<Integer, List<String>> collisions, Map<Integer, List<String>> bombings) {
+    public WorldState(int width, int height, Tile[] tiles, Map<Integer, List<String>> collisions, Map<Integer, List<String>> explosions) {
         this.width = width;
         this.height = height;
         this.tiles = ArrayUtils.clone(tiles);
         this.collisions = collisions;
-        this.bombings = bombings;
+        this.explosions = explosions;
     }
 
 
@@ -231,8 +231,8 @@ public class WorldState {
         return listPositionsWithContentOf(Empty.class);
     }
 
-    public int[] listBombPositions() {
-        return listPositionsWithContentOf(Bomb.class);
+    public int[] listPowerUpPositions() {
+        return listPositionsWithContentOf(PowerUp.class);
     }
 
     public int[] listObstaclePositions() {
@@ -276,12 +276,12 @@ public class WorldState {
         return tiles;
     }
 
-    public Map<Integer, List<String>> getBombings() {
-        return bombings;
+    public Map<Integer, List<String>> getExplosions() {
+        return explosions;
     }
 
-    public void setBombings(Map<Integer, List<String>> bombings) {
-        this.bombings = bombings;
+    public void setExplosions(Map<Integer, List<String>> explosions) {
+        this.explosions = explosions;
     }
 
     public Map<Integer, List<String>> getCollisions() {

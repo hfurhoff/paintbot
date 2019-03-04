@@ -2,7 +2,13 @@ package se.cygni.paintbot.client;
 
 import org.apache.commons.lang3.StringUtils;
 import se.cygni.paintbot.api.event.MapUpdateEvent;
-import se.cygni.paintbot.api.model.*;
+import se.cygni.paintbot.api.model.CharacterInfo;
+import se.cygni.paintbot.api.model.Map;
+import se.cygni.paintbot.api.model.MapCharacter;
+import se.cygni.paintbot.api.model.MapObstacle;
+import se.cygni.paintbot.api.model.MapPaintbotBody;
+import se.cygni.paintbot.api.model.MapPowerUp;
+import se.cygni.paintbot.api.model.TileContent;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -232,7 +238,7 @@ public class AnsiPrinter {
                             SNAKE_PART,
                             FG_DEFAULT,
                             bg_default, sb);
-            } else if (tc instanceof MapBomb)
+            } else if (tc instanceof MapPowerUp)
                 append(
                         FOOD_COLOR,
                         bg_color,

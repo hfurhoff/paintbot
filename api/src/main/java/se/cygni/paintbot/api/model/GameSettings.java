@@ -11,16 +11,16 @@ public class GameSettings {
     // Randomly place obstacles
     private boolean obstaclesEnabled = true;
 
-    // Randomly place bombs
-    private boolean bombsEnabled = true;
+    // Randomly place power ups
+    private boolean powerUpsEnabled = true;
 
-    // Likelihood (in percent) that a new bomb will be
+    // Likelihood (in percent) that a new power up will be
     // added to the world
-    private int addBombLikelihood = 15;
+    private int addPowerUpLikelihood = 15;
 
     // Likelihood (in percent) that a
-    // bomb will be removed from the world
-    private int removeBombLikelihood = 5;
+    // power up will be removed from the world
+    private int removePowerUpLikelihood = 5;
 
 
     // Indicates that this is a training game,
@@ -44,9 +44,9 @@ public class GameSettings {
     // The starting count for obstacles
 
     private int startObstacles = 5;
-    // The starting count for bomb
+    // The starting count for power up
 
-    private int startBombs = 0;
+    private int startPowerUps = 0;
 
     private int gameDurationInSeconds = 60; // TODO Dont forget to set this back to something reasonable
 
@@ -64,16 +64,16 @@ public class GameSettings {
         return obstaclesEnabled;
     }
 
-    public boolean isBombsEnabled() {
-        return bombsEnabled;
+    public boolean isPowerUpsEnabled() {
+        return powerUpsEnabled;
     }
 
-    public int getAddBombLikelihood() {
-        return addBombLikelihood;
+    public int getAddPowerUpLikelihood() {
+        return addPowerUpLikelihood;
     }
 
-    public int getRemoveBombLikelihood() {
-        return removeBombLikelihood;
+    public int getRemovePowerUpLikelihood() {
+        return removePowerUpLikelihood;
     }
 
     public boolean isTrainingGame() {
@@ -100,8 +100,8 @@ public class GameSettings {
         return startObstacles;
     }
 
-    public int getStartBombs() {
-        return startBombs;
+    public int getStartPowerUps() {
+        return startPowerUps;
     }
 
     public int getGameDurationInSeconds() {
@@ -124,16 +124,16 @@ public class GameSettings {
         this.obstaclesEnabled = obstaclesEnabled;
     }
 
-    public void setBombsEnabled(boolean bombsEnabled) {
-        this.bombsEnabled = bombsEnabled;
+    public void setPowerUpsEnabled(boolean powerUpsEnabled) {
+        this.powerUpsEnabled = powerUpsEnabled;
     }
 
-    public void setAddBombLikelihood(int addBombLikelihood) {
-        this.addBombLikelihood = addBombLikelihood;
+    public void setAddPowerUpLikelihood(int addPowerUpLikelihood) {
+        this.addPowerUpLikelihood = addPowerUpLikelihood;
     }
 
-    public void setRemoveBombLikelihood(int removeBombLikelihood) {
-        this.removeBombLikelihood = removeBombLikelihood;
+    public void setRemovePowerUpLikelihood(int removePowerUpLikelihood) {
+        this.removePowerUpLikelihood = removePowerUpLikelihood;
     }
 
     public void setTrainingGame(boolean trainingGame) {
@@ -160,8 +160,8 @@ public class GameSettings {
         this.startObstacles = startObstacles;
     }
 
-    public void setStartBombs(int startBombs) {
-        this.startBombs = startBombs;
+    public void setStartPowerUps(int startPowerUps) {
+        this.startPowerUps = startPowerUps;
     }
 
     public void setGameDurationInSeconds(int gameDurationInSeconds) {

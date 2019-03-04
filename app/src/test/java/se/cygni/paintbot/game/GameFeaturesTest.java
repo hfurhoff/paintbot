@@ -50,19 +50,19 @@ public class GameFeaturesTest {
     @Test
     public void testStartFoodIsPositive() throws Exception {
         GameFeatures gf = new GameFeatures();
-        gf.setStartBombs(-2);
+        gf.setStartPowerUps(-2);
         gf.applyValidation();
 
-        Assert.assertEquals(0, gf.getStartBombs());
+        Assert.assertEquals(0, gf.getStartPowerUps());
 
-        gf.setStartBombs(0);
+        gf.setStartPowerUps(0);
         gf.applyValidation();
 
-        Assert.assertEquals(0, gf.getStartBombs());
+        Assert.assertEquals(0, gf.getStartPowerUps());
 
-        gf.setStartBombs(7);
+        gf.setStartPowerUps(7);
         gf.applyValidation();
 
-        Assert.assertEquals(7, gf.getStartBombs());
+        Assert.assertEquals(7, gf.getStartPowerUps());
     }
 }

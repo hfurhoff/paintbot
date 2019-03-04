@@ -6,18 +6,20 @@ import org.junit.Test;
 import se.cygni.game.enums.Action;
 import se.cygni.game.exception.OutOfBoundsException;
 import se.cygni.game.testutil.PaintbotTestUtil;
-import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.CharacterImpl;
 import se.cygni.game.worldobject.Obstacle;
-import se.cygni.game.worldobject.Character;
+import se.cygni.game.worldobject.PowerUp;
 
 import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class WorldStateTest {
 
@@ -32,13 +34,13 @@ public class WorldStateTest {
         WorldState ws = new WorldState(10, 10);
         Tile[] tiles = ws.getTiles();
 
-        // Place a bomb on tile 12 => coordinate 2,1
-        Bomb bomb = new Bomb();
-        tiles[12] = new Tile(bomb);
+        // Place a powerUp on tile 12 => coordinate 2,1
+        PowerUp powerUp = new PowerUp();
+        tiles[12] = new Tile(powerUp);
 
         ws = new WorldState(10, 10, tiles);
 
-        assertEquals(bomb, ws.getTile(12).getContent());
+        assertEquals(powerUp, ws.getTile(12).getContent());
     }
 
     @Test(expected = OutOfBoundsException.class)
@@ -56,7 +58,7 @@ public class WorldStateTest {
     @Test
     public void testGetTileBoundaryCheck() throws Exception {
         WorldState ws = new WorldState(10, 10);
-        Bomb f1 = new Bomb();
+        PowerUp f1 = new PowerUp();
         Obstacle o1 = new Obstacle();
 
         ws = PaintbotTestUtil.replaceWorldObjectAt(ws, f1, 0);
@@ -102,7 +104,7 @@ public class WorldStateTest {
     @Test
     public void testIsTileEmpty() throws Exception {
         // Place a food on tile 12 => coordinate 2,1
-        WorldState ws = PaintbotTestUtil.createWorld(Bomb.class, 10, 10, 12);
+        WorldState ws = PaintbotTestUtil.createWorld(PowerUp.class, 10, 10, 12);
 
         assertFalse(ws.isTileEmpty(12));
         assertTrue(ws.isTileEmpty(0));
@@ -178,9 +180,9 @@ public class WorldStateTest {
         // Change some tiles
         Tile[] tiles = ws.getTiles();
 
-        tiles[5] = new Tile(new Bomb());
-        tiles[15] = new Tile(new Bomb());
-        tiles[25] = new Tile(new Bomb());
+        tiles[5] = new Tile(new PowerUp());
+        tiles[15] = new Tile(new PowerUp());
+        tiles[25] = new Tile(new PowerUp());
         tiles[78] = new Tile(new Obstacle());
         tiles[88] = new Tile(new Obstacle());
         tiles[92] = new Tile(new Obstacle());
@@ -188,7 +190,7 @@ public class WorldStateTest {
 
         WorldState newWorld = new WorldState(ws.getWidth(), ws.getHeight(), tiles);
 
-        int[] foodPositions = newWorld.listPositionsWithContentOf(Bomb.class);
+        int[] foodPositions = newWorld.listPositionsWithContentOf(PowerUp.class);
         int[] obstaclePositions = newWorld.listPositionsWithContentOf(Obstacle.class);
 
         assertEquals(3, foodPositions.length);
@@ -244,7 +246,7 @@ public class WorldStateTest {
     @Test
     public void testListEmptyPositions_NotAllEmpty() throws Exception {
 
-        WorldState ws = PaintbotTestUtil.createWorld(Bomb.class, 10, 10, new int[] { 50 });
+        WorldState ws = PaintbotTestUtil.createWorld(PowerUp.class, 10, 10, new int[]{50});
 
         int[] emptyPositions = ws.listEmptyPositions();
         assertEquals(99, emptyPositions.length);
@@ -256,7 +258,7 @@ public class WorldStateTest {
     public void testListEmptyPositions() throws Exception {
 
         int[] foodPositions = new int[] { 2, 6, 85 };
-        WorldState ws = PaintbotTestUtil.createWorld(Bomb.class, 10, 10, foodPositions);
+        WorldState ws = PaintbotTestUtil.createWorld(PowerUp.class, 10, 10, foodPositions);
 
         int[] emptyPositions = IntStream.range(0, 100).filter( pos->
             !ArrayUtils.contains(foodPositions, pos)
@@ -268,7 +270,7 @@ public class WorldStateTest {
     @Test
     public void testListEmptyValidPositions() throws Exception {
         int[] foodPositions = new int[] { 2, 6, 90 };
-        WorldState ws = PaintbotTestUtil.createWorld(Bomb.class, 10, 10, foodPositions);
+        WorldState ws = PaintbotTestUtil.createWorld(PowerUp.class, 10, 10, foodPositions);
 
         CharacterImpl h1 = new CharacterImpl("h1", "p1", 16);
         CharacterImpl h2 = new CharacterImpl("h2", "p2", 84);
@@ -290,9 +292,9 @@ public class WorldStateTest {
     public void testListFoodPositions() throws Exception {
 
         int[] foodPositions = new int[] { 2, 6, 85 };
-        WorldState ws = PaintbotTestUtil.createWorld(Bomb.class, 10, 10, foodPositions);
+        WorldState ws = PaintbotTestUtil.createWorld(PowerUp.class, 10, 10, foodPositions);
 
-        assertArrayEquals(foodPositions, ws.listBombPositions());
+        assertArrayEquals(foodPositions, ws.listPowerUpPositions());
     }
 
     @Test
