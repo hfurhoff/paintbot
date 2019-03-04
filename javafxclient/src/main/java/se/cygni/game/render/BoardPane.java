@@ -4,10 +4,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import se.cygni.snake.api.model.Map;
-import se.cygni.snake.api.model.SnakeInfo;
-import se.cygni.snake.client.MapCoordinate;
-import se.cygni.snake.client.MapUtil;
+import se.cygni.paintbot.api.model.Map;
+import se.cygni.paintbot.api.model.PaintbotInfo;
+import se.cygni.paintbot.client.MapCoordinate;
+import se.cygni.paintbot.client.MapUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,39 +26,39 @@ public class BoardPane extends Pane {
 //    private MapUpdateEvent lastMapUpdateEvent = null;
     private Map lastMap = null;
 
-    private List<SnakeColor> snakeColors = new ArrayList<SnakeColor>() {{
-        add(new SnakeColor(Color.DARKORANGE, Color.DARKTURQUOISE));
-        add(new SnakeColor(Color.SADDLEBROWN, Color.PERU));
-        add(new SnakeColor(Color.PURPLE, Color.SEAGREEN));
-        add(new SnakeColor(Color.NAVY, Color.DODGERBLUE));
-        add(new SnakeColor(Color.FORESTGREEN, Color.OLIVE));
-        add(new SnakeColor(Color.SEAGREEN, Color.STEELBLUE));
-        add(new SnakeColor(Color.MEDIUMORCHID, Color.SKYBLUE));
-        add(new SnakeColor(Color.LIGHTSALMON, Color.LIMEGREEN));
-        add(new SnakeColor(Color.HOTPINK, Color.FUCHSIA));
-        add(new SnakeColor(Color.CRIMSON, Color.DARKKHAKI));
+    private List<PaintbotColor> paintbotColors = new ArrayList<PaintbotColor>() {{
+        add(new PaintbotColor(Color.DARKORANGE, Color.DARKTURQUOISE));
+        add(new PaintbotColor(Color.SADDLEBROWN, Color.PERU));
+        add(new PaintbotColor(Color.PURPLE, Color.SEAGREEN));
+        add(new PaintbotColor(Color.NAVY, Color.DODGERBLUE));
+        add(new PaintbotColor(Color.FORESTGREEN, Color.OLIVE));
+        add(new PaintbotColor(Color.SEAGREEN, Color.STEELBLUE));
+        add(new PaintbotColor(Color.MEDIUMORCHID, Color.SKYBLUE));
+        add(new PaintbotColor(Color.LIGHTSALMON, Color.LIMEGREEN));
+        add(new PaintbotColor(Color.HOTPINK, Color.FUCHSIA));
+        add(new PaintbotColor(Color.CRIMSON, Color.DARKKHAKI));
     }};
 
-    private java.util.Map<String, SnakeColor> snakeColorMap = new HashMap<>();
+    private java.util.Map<String, PaintbotColor> paintbotColorMap = new HashMap<>();
 
     public BoardPane(Color background) {
         this.background = background;
         getChildren().add(canvas);
     }
 
-    public SnakeColor getSnakeColor(String playerId) {
-        if (snakeColorMap.containsKey(playerId)) {
-            return snakeColorMap.get(playerId);
+    public PaintbotColor getPaintbotColor(String playerId) {
+        if (paintbotColorMap.containsKey(playerId)) {
+            return paintbotColorMap.get(playerId);
         }
-        return new SnakeColor(Color.WHEAT, Color.WHITE);
+        return new PaintbotColor(Color.WHEAT, Color.WHITE);
     }
 
     public void drawMapUpdate(Map map) {
 //        lastMapUpdateEvent = mapUpdateEvent;
         lastMap = map;
 
-//        populateSnakeColors(mapUpdateEvent.getMap().getSnakeInfos());
-        populateSnakeColors(map.getSnakeInfos());
+//        populatePaintbotColors(mapUpdateEvent.getMap().getPaintbotInfos());
+        populatePaintbotColors(map.getPaintbotInfos());
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -66,11 +66,11 @@ public class BoardPane extends Pane {
 
         MapUtil mapUtil = new MapUtil(map, "fake");
 
-        for (SnakeInfo snakeInfo : map.getSnakeInfos()) {
-            drawSnake(
+        for (PaintbotInfo paintbotInfo : map.getPaintbotInfos()) {
+            drawPaintbot(
                     gc,
-                    mapUtil.getSnakeSpread(snakeInfo.getId()),
-                    snakeInfo.getId());
+                    mapUtil.getPaintbotSpread(paintbotInfo.getId()),
+                    paintbotInfo.getId());
         }
 
         drawStaticObjects(gc, mapUtil, Color.LIGHTGREEN, Color.BLACK);
@@ -170,33 +170,33 @@ public class BoardPane extends Pane {
 
     }
 
-    private void drawSnake(GraphicsContext gc, MapCoordinate[] snakeSpread, String snakeId) {
+    private void drawPaintbot(GraphicsContext gc, MapCoordinate[] paintbotSpread, String paintbotId) {
 
         boolean isHead = true;
         int c = 0;
-        int length = snakeSpread.length;
-        for (MapCoordinate coordinate : snakeSpread) {
+        int length = paintbotSpread.length;
+        for (MapCoordinate coordinate : paintbotSpread) {
             double x = coordinate.x * tileSize + (coordinate.x - 1) * lineWidth + gameOffsetX;
             double y = coordinate.y * tileSize + (coordinate.y - 1) * lineWidth + gameOffsetY;
 
             if (isHead) {
-                gc.setFill(snakeColorMap.get(snakeId).head);
+                gc.setFill(paintbotColorMap.get(paintbotId).head);
             } else {
                 switch (length - c) {
                     case 1:
-                        gc.setFill(snakeColorMap.get(snakeId).tail1);
+                        gc.setFill(paintbotColorMap.get(paintbotId).tail1);
                         break;
                     case 2:
-                        gc.setFill(snakeColorMap.get(snakeId).tail2);
+                        gc.setFill(paintbotColorMap.get(paintbotId).tail2);
                         break;
                     case 3:
-                        gc.setFill(snakeColorMap.get(snakeId).tail3);
+                        gc.setFill(paintbotColorMap.get(paintbotId).tail3);
                         break;
                     case 4:
-                        gc.setFill(snakeColorMap.get(snakeId).tail4);
+                        gc.setFill(paintbotColorMap.get(paintbotId).tail4);
                         break;
                     default:
-                        gc.setFill(snakeColorMap.get(snakeId).body);
+                        gc.setFill(paintbotColorMap.get(paintbotId).body);
                         break;
                 }
             }
@@ -224,20 +224,20 @@ public class BoardPane extends Pane {
         }
     }
 
-    private void populateSnakeColors(SnakeInfo[] snakeInfos) {
-        if (snakeInfos.length > snakeColors.size()) {
+    private void populatePaintbotColors(PaintbotInfo[] paintbotInfos) {
+        if (paintbotInfos.length > paintbotColors.size()) {
             throw new RuntimeException("More players than colors available");
         }
 
         int c = 0;
-        for (SnakeInfo snakeInfo : snakeInfos) {
-            if (!snakeColorMap.containsKey(snakeInfo.getId())) {
-                snakeColorMap.put(snakeInfo.getId(), snakeColors.get(c++));
+        for (PaintbotInfo paintbotInfo : paintbotInfos) {
+            if (!paintbotColorMap.containsKey(paintbotInfo.getId())) {
+                paintbotColorMap.put(paintbotInfo.getId(), paintbotColors.get(c++));
             }
         }
     }
 
-    public java.util.Map<String, SnakeColor> getSnakeColorMap() {
-        return snakeColorMap;
+    public java.util.Map<String, PaintbotColor> getPaintbotColorMap() {
+        return paintbotColorMap;
     }
 }

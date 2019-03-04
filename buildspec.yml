@@ -11,4 +11,4 @@ phases:
       - gradle test
 artifacts:
   files:
-    - app/build/libs/snakebot-app-*.jar
+    - app/build/libs/paintbot-app-*.jar

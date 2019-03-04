@@ -2,7 +2,7 @@ package se.cygni.game.render;
 
 import javafx.scene.paint.Color;
 
-public class SnakeColor {
+public class PaintbotColor {
     public final Color head;
     public final Color body;
     public final Color tail1;
@@ -10,7 +10,7 @@ public class SnakeColor {
     public final Color tail3;
     public final Color tail4;
 
-    public SnakeColor(Color head, Color body) {
+    public PaintbotColor(Color head, Color body) {
         this.head = head;
         this.body = body;
 

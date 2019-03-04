@@ -1,5 +1,5 @@
 jar {
-    baseName = 'snakebot-client-util'
+    baseName = 'paintbot-client-util'
 }
 
 dependencies {

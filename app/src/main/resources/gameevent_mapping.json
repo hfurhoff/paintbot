@@ -85,7 +85,7 @@
             "obstaclePositions": {
               "type": "long"
             },
-            "snakeInfos": {
+            "paintbotInfos": {
               "properties": {
                 "id": {
                   "type": "string",

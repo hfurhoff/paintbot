@@ -1,5 +1,5 @@
 jar {
-    baseName = 'snakebot-client'
+    baseName = 'paintbot-client'
 }
 
 processResources {

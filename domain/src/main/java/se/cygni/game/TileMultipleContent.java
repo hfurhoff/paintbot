@@ -1,8 +1,10 @@
 package se.cygni.game;
 
-import se.cygni.game.worldobject.*;
 import se.cygni.game.worldobject.Character;
 import se.cygni.game.worldobject.CharacterImpl;
+import se.cygni.game.worldobject.Empty;
+import se.cygni.game.worldobject.PowerUp;
+import se.cygni.game.worldobject.WorldObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,7 @@ public class TileMultipleContent {
         }
 
         if (contents.size() == 2 &&
-                containsType(Bomb.class) && containsType(CharacterImpl.class)) {
+                containsType(PowerUp.class) && containsType(CharacterImpl.class)) {
             return getFirstContentOfType(CharacterImpl.class);
         }
 
@@ -85,7 +87,7 @@ public class TileMultipleContent {
         }
 
         if (contents.size() == 2 &&
-                containsType(Bomb.class) && containsType(CharacterImpl.class)) {
+                containsType(PowerUp.class) && containsType(CharacterImpl.class)) {
             return true;
         }
 
@@ -111,14 +113,14 @@ public class TileMultipleContent {
         contents.remove(getFirstContentOfType(type));
     }
 
-    public List<CharacterImpl> listOffendingSnakeHeads() {
+    public List<CharacterImpl> listOffendingPaintbotHeads() {
         return listContentsOfType(CharacterImpl.class);
     }
 
-    public List<String> listOffendingSnakeHeadIds() {
+    public List<String> listOffendingPaintbotHeadIds() {
         return listContentsOfType(CharacterImpl.class)
                 .stream()
-                .map(snakeHead -> snakeHead.getPlayerId())
+                .map(paintbotHead -> paintbotHead.getPlayerId())
                 .collect(Collectors.toList());
     }
 
@@ -153,15 +155,15 @@ public class TileMultipleContent {
         return false;
     }
 
-    public List<String> listSnakeIdsPresent() {
-        List<String> snakeIds = new ArrayList<>();
+    public List<String> listPaintbotIdsPresent() {
+        List<String> paintbotIds = new ArrayList<>();
 
         for (WorldObject wo : contents) {
             if (wo instanceof Character) {
-                snakeIds.add(((Character) wo).getPlayerId());
+                paintbotIds.add(((Character) wo).getPlayerId());
             }
         }
-        return snakeIds;
+        return paintbotIds;
     }
 
     //Check if a tile contains two character at the same time (useful to know if collisons are to be handled)

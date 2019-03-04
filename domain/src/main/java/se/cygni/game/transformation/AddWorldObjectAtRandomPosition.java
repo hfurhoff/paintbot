@@ -4,8 +4,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import se.cygni.game.Tile;
 import se.cygni.game.WorldState;
 import se.cygni.game.random.XORShiftRandom;
-import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Character;
+import se.cygni.game.worldobject.PowerUp;
 import se.cygni.game.worldobject.WorldObject;
 
 /**
@@ -44,7 +44,7 @@ public class AddWorldObjectAtRandomPosition implements WorldTransformation {
         if (worldObject instanceof Character) {
             Character character = (Character)worldObject;
             character.setPosition(randomPosition);
-        } else if (worldObject instanceof Bomb) {
+        } else if (worldObject instanceof PowerUp) {
             newTile = new Tile(worldObject, currentTile.getOwnerID());
         }
 

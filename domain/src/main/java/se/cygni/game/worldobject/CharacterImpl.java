@@ -7,14 +7,14 @@ public class CharacterImpl implements Character {
     private final String playerId;
     private int points;
     private int position;
-    private boolean isCarryingBomb;
+    private boolean isCarryingPowerUp;
     private int isStunnedForTicks;
 
     public CharacterImpl(String name, String playerId, int position) {
         this.name = name;
         this.playerId = playerId;
         this.position = position;
-        this.isCarryingBomb = false;
+        this.isCarryingPowerUp = false;
         this.isStunnedForTicks = 0;
     }
 
@@ -42,12 +42,12 @@ public class CharacterImpl implements Character {
         return playerId;
     }
 
-    public boolean isCarryingBomb() {
-        return isCarryingBomb;
+    public boolean isCarryingPowerUp() {
+        return isCarryingPowerUp;
     }
 
-    public void setCarryingBomb(boolean carryingBomb) {
-        isCarryingBomb = carryingBomb;
+    public void setCarryingPowerUp(boolean carryingPowerUp) {
+        isCarryingPowerUp = carryingPowerUp;
     }
 
     public int getIsStunnedForTicks() {

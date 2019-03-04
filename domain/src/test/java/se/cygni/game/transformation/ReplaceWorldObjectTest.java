@@ -4,8 +4,8 @@ import org.junit.Test;
 import se.cygni.game.Tile;
 import se.cygni.game.WorldState;
 import se.cygni.game.exception.TransformationException;
-import se.cygni.game.worldobject.Bomb;
 import se.cygni.game.worldobject.Empty;
+import se.cygni.game.worldobject.PowerUp;
 
 import static org.junit.Assert.assertTrue;
 
@@ -21,10 +21,10 @@ public class ReplaceWorldObjectTest {
         Tile tile = worldState.getTile(6);
         assertTrue(tile.getContent() instanceof Empty);
 
-        ReplaceWorldObject replaceWorldObject = new ReplaceWorldObject(new Bomb(), 6);
+        ReplaceWorldObject replaceWorldObject = new ReplaceWorldObject(new PowerUp(), 6);
         WorldState updatedWorldState = replaceWorldObject.transform(worldState);
         Tile updatedTile = updatedWorldState.getTile(6);
-        assertTrue(updatedTile.getContent() instanceof Bomb);
+        assertTrue(updatedTile.getContent() instanceof PowerUp);
     }
 
     @Test
