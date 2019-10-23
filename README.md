@@ -10,7 +10,7 @@ Always code as if the guy who ends up maintaining your code will be a violent ps
 > ./gradlew clean build
 > ./gradlew bootRun
 ```
-  - Start up the [webapp](https://github.com/cygni/paintbot-webapp) as described in the README. You may have to add the following line to src/Routes.tsx in the beginning of the document:
+  - Start up the [webapp](https://github.com/cygni/paintbot-webapp) as described in the README. You may have to add the following line to [src/Routes.tsx](https://github.com/cygni/paintbot-webapp/blob/develop/src/Routes.tsx) in the beginning of the document:
 ```
 const location = { origin: "http://localhost" };
 ```
